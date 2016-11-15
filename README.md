@@ -1,6 +1,8 @@
 # telegram-expense-bot
 This is a bot for the [Telegram](https://telegram.org/) messaging app using their [bot platform](https://core.telegram.org/bots). The code is open-source and consequently anybody could set up an own instance of the bot. To learn how to do so, see [this section](#how-to-host-it-myself). The official hosted version is available as [@ExpenseBot](https://telegram.me/ExpenseBot). To learn more about this bot, please refer to [this blog article](https://ferdinand-muetsch.de/telegram-expensebot-doodlerbot.html) or just send the bot a message with the `/help` command.
 
+![](https://anchr.io/i/rbtPU.png)
+
 ## What does it do?
 This bot’s purpose is to help people manage their daily expenses and keep track of their financial situation. Users can add expenses from wherever they are using a few simple commands from within the chat and have an eye on how much they have spent in a month or a day. This obviates the need for confusing Excel spreadsheets or paper notes. 
 
