@@ -1,29 +1,29 @@
 {
-  "name": "telegram-expense-bot",
-  "version": "1.0.0",
-  "description": "A bot that helps you manage and track your daily expenses.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "homepage": "https://github.com/n1try/telegram-expense-bot",
-  "author": {
-    "name": "Ferdinand Mütsch",
-    "url": "https://ferdinand-muetsch.de"
-  },
-  "license": "MIT",
-  "keywords": [
-    "telegram",
-    "bot",
-    "expenses",
-    "nodejs"
-  ],
-  "dependencies": {
-    "dateformat": "^1.0.12",
-    "lodash": "^4.11.1",
-    "mongodb": "^2.1.16",
-    "telegram-bot-sdk": "0.0.1",
-    "unirest": "^0.4.2"
-  }
+    "name": "telegram-expense-bot",
+    "version": "1.0.0",
+    "description": "A bot that helps you manage and track your daily expenses.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "homepage": "https://github.com/n1try/telegram-expense-bot",
+    "author": {
+        "name": "Ferdinand Mütsch",
+        "url": "https://ferdinand-muetsch.de"
+    },
+    "license": "MIT",
+    "keywords": [
+        "telegram",
+        "bot",
+        "expenses",
+        "nodejs"
+    ],
+    "dependencies": {
+        "dateformat": "^1.0.12",
+        "lodash": "^4.11.1",
+        "mongodb": "^2.1.16",
+        "telegram-bot-sdk": "0.0.3",
+        "unirest": "^0.4.2"
+    }
 }

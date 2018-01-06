@@ -1,20 +1,19 @@
-const db = require('./db')
-    , _ = require('lodash')
-    , cfg = require('./config')
-    , fs = require('fs')
-    , botlib = require('telegram-bot-sdk')
-    , Expense = require('./Classes/Expense')
-    , utils = require('./utils');
+const db = require('./db'),
+    _ = require('lodash'),
+    cfg = require('./config'),
+    fs = require('fs'),
+    botlib = require('telegram-bot-sdk'),
+    Expense = require('./Classes/Expense'),
+    utils = require('./utils');
 
-var recover = null
-    , initialOffset = null
-    , expenses = null;
+var recover = null,
+    initialOffset = null,
+    expenses = null;
 
 try {
     recover = require('./recover');
     initialOffset = recover.offset + 1;
-}
-catch (e) {
+} catch (e) {
     initialOffset = 0;
 }
 
@@ -30,11 +29,12 @@ const commands = {
 bot.setCommandCallbacks(commands);
 
 db.init(() => {
-    bot.getUpdates();
-    expenses = db.getCollection()
+    if (cfg.WEBHOOK_MODE) bot.listen(cfg.PORT, cfg.BOT_TOKEN);
+    else bot.getUpdates();
+    expenses = db.getCollection();
 });
 
-function processNonCommand (message) {
+function processNonCommand(message) {
     if (!message || !message.text) return false;
     // A message consisting of a month name
     if (/^([A-Za-z]+|#\w+|[A-Za-z]+\ #\w+|#\w+\ [A-Za-z]+)$/.test(message.text)) {
@@ -43,8 +43,7 @@ function processNonCommand (message) {
 
         if (!monthOrDay || cfg.MONTHS.hasOwnProperty(capitalized)) {
             return commands.get(message, _.split(message.text, ' '));
-        }
-        else if (!monthOrDay || cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
+        } else if (!monthOrDay || cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
             return commands.get(message, _.split(message.text, ' '));
         }
     }
@@ -55,7 +54,7 @@ function processNonCommand (message) {
     commands.new(message, [parsed[0], parsed[1], parsed[2] ? parsed[2] : null]);
 }
 
-function processInlineQuery (query) {}
+function processInlineQuery(query) {}
 
 /* In the unwanted case the bot crashes due to a malformed message that causes an exception the bot can't handle, we at least need to save the current offset
  (is incremented by one in initialization) so that the bot won't get stuck in a loop fetching this message on restart and crashing again. */

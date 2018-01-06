@@ -1,17 +1,19 @@
 {
-  "DB_URL": "",
-  "DB_COLLECTION": "expenses",
-  "BOT_TOKEN": "",
-  "BOT_NAME": "",
-  "BOT_TELEGRAM_USERNAME": "", 
-  "COMMANDS": {
-    "NEW": "/new",
-    "LIST": "/list",
-    "GET": "/get",
-    "HELP": "/help",
-    "RESET": "/reset"
-  },
-  "RECOVER_FILE": "recover.json",
-  "MONTHS": {"January": 0, "February": 1, "March": 2, "April": 3, "May": 4, "June": 5, "July": 6, "August": 7, "September": 8, "October": 9, "November": 10, "December": 11},
-  "WEEKDAYS": {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6}
+    "DB_URL": "",
+    "DB_COLLECTION": "expenses",
+    "BOT_TOKEN": "",
+    "BOT_NAME": "",
+    "BOT_TELEGRAM_USERNAME": "",
+    "WEBHOOK_MODE": false,
+    "PORT": 3000,
+    "COMMANDS": {
+        "NEW": "/new",
+        "LIST": "/list",
+        "GET": "/get",
+        "HELP": "/help",
+        "RESET": "/reset"
+    },
+    "RECOVER_FILE": "recover.json",
+    "MONTHS": { "January": 0, "February": 1, "March": 2, "April": 3, "May": 4, "June": 5, "July": 6, "August": 7, "September": 8, "October": 9, "November": 10, "December": 11 },
+    "WEEKDAYS": { "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6 }
 }
