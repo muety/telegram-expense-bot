@@ -23,7 +23,7 @@
         "dateformat": "^1.0.12",
         "lodash": "^4.11.1",
         "mongodb": "^2.1.16",
-        "telegram-bot-sdk": "0.0.3",
+        "telegram-bot-sdk": "^0.0.5",
         "unirest": "^0.4.2"
     }
 }
