@@ -2,16 +2,18 @@ const db = require('./db'),
     _ = require('lodash'),
     cfg = require('./config'),
     fs = require('fs'),
+    path = require('path'),
     botlib = require('telegram-bot-sdk'),
     Expense = require('./Classes/Expense'),
     utils = require('./utils');
 
+const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0 ? cfg.RECOVER_FILE : path.normalize(__dirname + '/' + cfg.RECOVER_FILE);
 var recover = null,
     initialOffset = null,
     expenses = null;
 
 try {
-    recover = require('./recover');
+    recover = require(recoveryFile);
     initialOffset = recover.offset + 1;
 } catch (e) {
     initialOffset = 0;
@@ -59,8 +61,9 @@ function processInlineQuery(query) {}
 /* In the unwanted case the bot crashes due to a malformed message that causes an exception the bot can't handle, we at least need to save the current offset
  (is incremented by one in initialization) so that the bot won't get stuck in a loop fetching this message on restart and crashing again. */
 process.on('SIGINT', () => {
-    fs.writeFileSync(cfg.RECOVER_FILE, JSON.stringify({
+    fs.writeFileSync(recoveryFile, JSON.stringify({
         offset: bot.getOffset()
     }));
+    db.close();
     process.exit();
 });
