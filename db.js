@@ -14,7 +14,10 @@ module.exports = {
 
 function init(callback) {
     mongo.connect(cfg.DB_URL, (err, db) => {
-        if (err) return console.log(err);
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
         else console.log('Connected to database.');
         _db = db;
         db.collection(cfg.DB_COLLECTION, (err, coll) => {
