@@ -3,6 +3,8 @@ const mongo = require('mongodb').MongoClient
 cfg = require('./config');
 
 var collExpenses = null;
+var _db = null;
+
 
 module.exports = {
     init: init,
@@ -19,6 +21,7 @@ function init(callback) {
             process.exit(1);
         }
         else console.log('Conectado com o Banco de dados');
+        _db = db
         collExpenses = db.db(cfg.DB_NAME).collection(cfg.DB_COLLECTION)
         callback();
     });

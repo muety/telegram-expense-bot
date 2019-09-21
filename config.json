@@ -1,7 +1,7 @@
 {
     "DB_URL": "",
     "DB_COLLECTION": "expenses",
-    "DB_NAME": "",
+    "DB_NAME": "expenses",
     "BOT_TOKEN": "",
     "BOT_NAME": "",
     "BOT_TELEGRAM_USERNAME": "",
