@@ -1,6 +1,7 @@
 {
     "DB_URL": "",
     "DB_COLLECTION": "expenses",
+    "DB_NAME": "",
     "BOT_TOKEN": "",
     "BOT_NAME": "",
     "BOT_TELEGRAM_USERNAME": "",
@@ -14,6 +15,6 @@
         "RESET": "/reset"
     },
     "RECOVER_FILE": "recover.json",
-    "MONTHS": { "January": 0, "February": 1, "March": 2, "April": 3, "May": 4, "June": 5, "July": 6, "August": 7, "September": 8, "October": 9, "November": 10, "December": 11 },
-    "WEEKDAYS": { "Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6 }
+    "MONTHS": { "Janeiro": 0, "Fevereiro": 1, "Março": 2, "Abril": 3, "Maio": 4, "Junho": 5, "Julho": 6, "Agosto": 7, "Setembro": 8, "Outubro": 9, "Novembro": 10, "Dezembro": 11 },
+    "WEEKDAYS": { "Domingo": 0, "Segunda": 1, "Terça": 2, "Quarta": 3, "Quinta": 4, "Sexta": 5, "Sabado": 6 }
 }
