@@ -13,12 +13,12 @@ module.exports = function (bot) {
             _(cfg.MONTHS).forEach((val, month) => {
                 keyboard.addButton(new bot.classes.KeyboardButton(month));
             });
-            return bot.sendMessage(new bot.classes.Message(message.chat.id, 'Select a month to view expenses for.', null, null, null, null, keyboard), (res) => {});
+            return bot.sendMessage(new bot.classes.Message(message.chat.id, 'Selecione o mês que deseja visualizar as despesas: ', null, null, null, null, keyboard), (res) => {});
         }
 
         var callback = function (err, all) {
             var sum = eu.sumUp(all);
-            bot.sendMessage(new bot.classes.Message(message.chat.id, `You have spent ${sum}.`, null, null, null, null, new bot.classes.ReplyKeyboardHide), () => {});
+            bot.sendMessage(new bot.classes.Message(message.chat.id, `Você gastou: ${sum}.`, null, null, null, null, new bot.classes.ReplyKeyboardHide), () => {});
         };
         utils.queryExpensesByUserMessage(db.getCollection(), message, args, callback);
     }

@@ -2,40 +2,38 @@ const _ = require('lodash')
     , cfg = require('./../config');
 
 const text = `
-        Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
+        Bem-vindo ao ExpenseBot. Este bot ajuda você a gerenciar e acompanhar suas despesas diárias. Você pode adicionar novas despesas ou obter uma visão geral ou lista de qualquer mês ou categoria.
         
+        *Adicionando uma nova despesa*
+        Os exemplos a seguir mostrarão várias maneiras de adicionar uma nova despesa.
+        1. \`1.99 Almoço #alimentação\` ou
+        2. \`${cfg.COMMANDS.NEW} 1.99 Almoço #alimentação\` adicionará uma despesa de _1.99_ (independentemente da sua moeda, isso não importa) com a descrição _Almoço_ na categoria _#alimentação_.
         
-        *Adding a new expense*
-        The following examples will show you various ways to add a new expense.
-        1. \`1.99 Lunch #food\` or
-        2. \`${cfg.COMMANDS.NEW} 1.99 Lunch #food\` will add an expense of _1.99_ (whichever your currency is, that doesn't matter) with the description _Lunch_ to the category _#food_.
+        Você pode simplesmente deixar sem a categoria (que é sempre definida pelo sinal de hashtag) - isso é apenas para você ter uma visão geral mais clara e uma separação no seu extrato.
+
+        *Observe:* Você sempre precisa digitar um ponto decimal (por exemplo, _1.0_ em vez de simplesmente _1_). Além disso, você também pode digitar o número negativo, se tiver uma receita ou quiser compensar uma despesa.
         
-        You can simply leave out the category (which is always defined by a hash sign) - this is just for you to have a clearer overview and separation later.
+        * Obtendo suas despesas *
+        Para obter uma visão geral da sua situação financeira atual, faça o seguinte:
+        1. \`${cfg.COMMANDS.GET}\` te permite escolher um mês.
+        2. \`${cfg.COMMANDS.GET} April\` ou simplismente \`April\` - o valor total das despesas em abril. Claro que isso funciona com qualquer outro mês.
+        3. \`${cfg.COMMANDS.GET} #alimentação\` ou simplismente \`#alimentação\` - o valor total de despesas na categoria _#alimentação_ no mês atual.
+        4. \`${cfg.COMMANDS.GET} #alimentação April\` or simply \`#alimentação April\` - o valor total de despesas na categoria _#alimentação_ em abril
+        5. O mesmo funciona para dias da semana em vez de meses, por exemplo \`Segunda-feira\`
         
-        *Please note:* You always need to type the decimal separator dot (e.g. _1.0_ instead of simply _1_). Further you can also type _negative_ number if you had an income or want to compensate an expense.
+        * Listando suas despesas *
+        Para obter um extrato da sua situação financeira atual, faça o seguinte:
+        1. \`${cfg.COMMANDS.LIST} April\` ou simplismente \`April\` - o valor total das despesas em Abril. Claro que isso funciona com qualquer outro mês.
+        2. \`${cfg.COMMANDS.LIST} #alimentação\` ou simplismente \`#alimentação\` - o valor total de despesas na categoria _#alimentação_ no mês atual.
+        3. \`${cfg.COMMANDS.LIST} #alimentação April\` or simply \`#alimentação April\` - o valor total de despesas na categoria _#alimentação_ em abril
+        4. O mesmo funciona para dias da semana em vez de meses, por exemplo \`Segunda-feira\`
         
-        
-        *Getting your expenses*
-        To get an overview of your current financial situation you can do the following:
-        1. \`${cfg.COMMANDS.GET}\` lets you choose a month.
-        2. \`${cfg.COMMANDS.GET} April\` or simply \`April\` - the total amount of the expenses in April. Of course this works with any other month.
-        3. \`${cfg.COMMANDS.GET} #food\` or simply \`#food\` - the total amount of expenses in the _#food_ category in the current month.
-        4. \`${cfg.COMMANDS.GET} #food April\` or simply \`#food April\` - the total amount of expenses in the _#food_ category in April
-        5. The same works for weekdays instead of months, e.g. \`Monday\`
-        
-        *Listing your expenses*
-        To get an overview of your current financial situation you can do the following:
-        1. \`${cfg.COMMANDS.LIST} April\` - all expenses in April. Of course this works with any other month.
-        2. \`${cfg.COMMANDS.LIST} #food\` - all expenses in the _#food_ category in the current month.
-        3. \`${cfg.COMMANDS.LIST} #food April\` - all expenses in the _#food_ category in April
-        4. The same works for weekdays instead of months, e.g. \`Monday\`
-        
-        *Resetting you expenses*
-        To reset (i.e. delete) all your expenses for a given month or category, you can do the following:
-        1. \`${cfg.COMMANDS.RESET} April\` - delete all expenses in April. Of course this works with any other month.
-        2. \`${cfg.COMMANDS.RESET} #food\` - delete all expenses in the _#food_ category in the current month.
-        3. \`${cfg.COMMANDS.RESET} #food April\` - delete all expenses in the _#food_ category in April
-        4. The same works for weekdays instead of months, e.g. \`Monday\`
+        * Redefinindo suas despesas *
+        Para redefinir (ou seja, excluir) todas as suas despesas para um determinado mês ou categoria, você pode fazer o seguinte:
+        1. \`${cfg.COMMANDS.RESET} April\` - exclua todas as despesas em abril. Claro que isso funciona com qualquer outro mês.
+        2. \`${cfg.COMMANDS.RESET} #alimentação\` - exclua todas as despesas na categoria _#alimentação_ no mês atual.
+        3. \`${cfg.COMMANDS.RESET} #alimentação April\` - exclua todas as despesas da categoria _#alimentação_ em abril
+        4. O mesmo funciona para dias da semana em vez de meses, por exemplo \`Segunda-feira\`
     `;
 
 module.exports = function (bot) {
