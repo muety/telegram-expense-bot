@@ -6,6 +6,7 @@
     "BOT_TELEGRAM_USERNAME": "",
     "WEBHOOK_MODE": false,
     "PORT": 3000,
+    "BIND_IP4": "127.0.0.1",
     "COMMANDS": {
         "NEW": "/new",
         "LIST": "/list",

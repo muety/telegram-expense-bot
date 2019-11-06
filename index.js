@@ -31,7 +31,7 @@ const commands = {
 bot.setCommandCallbacks(commands);
 
 db.init(() => {
-    if (cfg.WEBHOOK_MODE) bot.listen(cfg.PORT, cfg.BOT_TOKEN);
+    if (cfg.WEBHOOK_MODE) bot.listen(cfg.PORT, cfg.BIND_IP4, cfg.BOT_TOKEN);
     else bot.getUpdates();
     expenses = db.getCollection();
 });
