@@ -21,7 +21,7 @@ function generateQueryFromUserMessage(args, user) {
     if (/^#\w+$/.test(args[0]) && !args[1]) {
         // /get #food
         from = new Date(date.getFullYear(), date.getMonth(), 1),
-            to = new Date(date.getFullYear(), date.getMonth() + 1, 0),
+            to = new Date(date.getFullYear(), date.getMonth() + 1, 1),
             cat = args[0];
     }
     else if (/^[A-Za-z]+$/.test(args[0]) && !args[1]) {
@@ -30,7 +30,7 @@ function generateQueryFromUserMessage(args, user) {
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 0);
+                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1);
         }
         else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
@@ -43,7 +43,7 @@ function generateQueryFromUserMessage(args, user) {
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 0)
+                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1)
         }
         else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
@@ -57,7 +57,7 @@ function generateQueryFromUserMessage(args, user) {
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 0)
+                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1)
         }
         else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
             from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
