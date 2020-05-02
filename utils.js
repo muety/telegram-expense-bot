@@ -5,7 +5,7 @@ function parseMessage(messageText) {
     if (/-*\d+\.\d+[a-zA-z\ ]+/.test(messageText)) {
         return [
             parseFloat(messageText.match(/-*\d+\.\d+/)),
-            (messageText.match(/-*\d+\.\d+[a-zA-z\ ]+/)[0].match(/[a-zA-z\ ]+/)[0]).trim(),
+            (messageText.match(/-*\d+\.\d+[a-zA-zäöüÄÖÜ\ ]+/)[0].match(/[a-zA-zäöüÄÖÜ\ ]+/)[0]).trim(),
             /#\w+/.test(messageText) ? messageText.match(/#\w+/)[0] : null
         ]
     }
