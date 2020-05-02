@@ -42,7 +42,7 @@ function processNonCommand(message) {
     // A message consisting of a month name
     if (/^([A-Za-z]+|#\w+|[A-Za-z]+\ #\w+|#\w+\ [A-Za-z]+)$/.test(message.text)) {
         let monthOrDay = message.text.match(/[A-Za-z]+/)
-        let capitalized = utils.capitalizeFirstLetter(monthOrDay[0])
+        let capitalized = utils.capitalize(monthOrDay[0])
 
         if (!monthOrDay || cfg.MONTHS.hasOwnProperty(capitalized)) {
             return commands.get(message, _.split(message.text, ' '))
