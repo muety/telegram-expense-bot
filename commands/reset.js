@@ -10,6 +10,6 @@ module.exports = function (bot) {
             if (err) bot.sendMessage(new bot.classes.Message(message.chat.id, `Sorry, failed to reset your expenses. Make sure your command look like one of those in the /help.`, null, null, null, null, new bot.classes.ReplyKeyboardHide), () => {})
             bot.sendMessage(new bot.classes.Message(message.chat.id, `Successfully reset your expenses.`, null, null, null, null, new bot.classes.ReplyKeyboardHide), () => {})
         }
-        utils.deleteExpensesByUserMessage(db.getCollection(), message, args, callback)
+        utils.deleteExpenses(db.getCollection(), message, args, callback)
     }
 }
