@@ -1,5 +1,4 @@
-const _ = require('lodash')
-    , cfg = require('./../config')
+const cfg = require('./../config')
 
 const text = `
         Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.

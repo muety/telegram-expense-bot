@@ -1,5 +1,4 @@
-const _ = require('lodash')
-    , cfg = require('./../config')
+const cfg = require('./../config')
     , db  = require('./../db')
     , utils = require('./../utils')
 

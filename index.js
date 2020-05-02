@@ -1,7 +1,6 @@
 'use strict'
 
 const db = require('./db'),
-    _ = require('lodash'),
     cfg = require('./config'),
     fs = require('fs'),
     path = require('path'),
@@ -45,15 +44,15 @@ function processNonCommand(message) {
         let capitalized = utils.capitalize(monthOrDay[0])
 
         if (!monthOrDay || cfg.MONTHS.hasOwnProperty(capitalized)) {
-            return commands.get(message, _.split(message.text, ' '))
+            return commands.get(message, message.text.split(' '))
         } else if (!monthOrDay || cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
-            return commands.get(message, _.split(message.text, ' '))
+            return commands.get(message, message.text.split(' '))
         }
     }
 
     // A message consisting anything else - probably an expense to add
     let parsed = utils.parseMessage(message.text)
-    if (!parsed[0] || _.isNumber(!parsed[0]) || !parsed[1]) return bot.sendMessage(new bot.classes.Message(message.chat.id, 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'), () => {})
+    if (!parsed[0] || isNaN(parseFloat(parsed[0])) || !parsed[1]) return bot.sendMessage(new bot.classes.Message(message.chat.id, 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'), () => {})
     commands.new(message, [parsed[0], parsed[1], parsed[2] ? parsed[2] : null])
 }
 

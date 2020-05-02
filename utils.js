@@ -1,12 +1,11 @@
 const Expense = require('./model/expense')
     , cfg = require('./config')
-    , _ = require('lodash')
 
 function parseMessage(messageText) {
     if (/-*\d+\.\d+[a-zA-z\ ]+/.test(messageText)) {
         return [
             parseFloat(messageText.match(/-*\d+\.\d+/)),
-            _.trim(messageText.match(/-*\d+\.\d+[a-zA-z\ ]+/)[0].match(/[a-zA-z\ ]+/)[0]),
+            (messageText.match(/-*\d+\.\d+[a-zA-z\ ]+/)[0].match(/[a-zA-z\ ]+/)[0]).trim(),
             /#\w+/.test(messageText) ? messageText.match(/#\w+/)[0] : null
         ]
     }
@@ -74,10 +73,15 @@ function findExpenses(coll, message, args, callback) {
 
     coll.find(query).toArray((err, all) => {
         if (err) return callback(err)
-        let expenses = []
-        _(all).forEach((item) => {
-            expenses.push(new Expense(item.user, item.amount.toFixed(2), item.description, item.timestamp, (item.category ? item.category : undefined)))
-        })
+        let expenses = all.map(
+            item => new Expense(
+                item.user,
+                item.amount.toFixed(2),
+                item.description,
+                item.timestamp,
+                (item.category ? item.category : undefined)
+            )
+        )
         callback(null, expenses)
     })
 }
