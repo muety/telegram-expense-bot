@@ -15,7 +15,7 @@ In order to host this bot on your own, you need a few things.
 * A bot token, which you get from registering a new bot to the [@BotFather](https://telegram.me/BotFather)
 
 ### Configuration
-To configure your bot, clone this repository and then edit `config.json` file.
+To configure your bot, clone this repository, copy `config.example.json` to `config.json` and edit it.
 * `DB_URL`: your MongoDB's complete URL including hostname, port, username, password and database name (if using _mlab_, you can simply copy this from their website)
 * `DB_COLLECTION`: the name of the database collection where your data should be stored, e.g. _"expenses_live"_
 * `BOT_TOKEN`: the token you got from the _BotFather_
