@@ -4,7 +4,7 @@
     "BOT_TOKEN": "",
     "BOT_NAME": "",
     "BOT_TELEGRAM_USERNAME": "",
-    "WEBHOOK_MODE": false,
+    "WEBHOOK_MODE": true,
     "PORT": 3000,
     "BIND_IP4": "127.0.0.1",
     "COMMANDS": {

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const df = require('dateformat');
 
@@ -12,7 +12,7 @@ class Expense {
     }
 
     toString () {
-        var d = new Date(this.timestamp);
+        let d = new Date(this.timestamp);
         return `[${df(d, 'mmmm dS')}] ${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''}`
     }
 }

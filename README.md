@@ -28,4 +28,4 @@ $ npm start
 ```
 
 ## License
-MIT @ [Ferdinand Mütsch](https://ferdinand-muetsch.de)
+MIT @ [Ferdinand Mütsch](https://muetsch.io)

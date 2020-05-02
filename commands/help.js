@@ -1,5 +1,5 @@
 const _ = require('lodash')
-    , cfg = require('./../config');
+    , cfg = require('./../config')
 
 const text = `
         Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
@@ -36,10 +36,10 @@ const text = `
         2. \`${cfg.COMMANDS.RESET} #food\` - delete all expenses in the _#food_ category in the current month.
         3. \`${cfg.COMMANDS.RESET} #food April\` - delete all expenses in the _#food_ category in April
         4. The same works for weekdays instead of months, e.g. \`Monday\`
-    `;
+    `
 
 module.exports = function (bot) {
     return function (message, args) {
-        bot.sendMessage(new bot.classes.Message(message.chat.id, text, 'Markdown'), () => {});
+        bot.sendMessage(new bot.classes.Message(message.chat.id, text, 'Markdown'), () => {})
     }
-};
+}

@@ -1,13 +1,9 @@
-const _ = require('lodash')
-    , cfg = require('./../config')
-    , db  = require('./../db')
-    , utils = require('./../utils')
-    , ExpenseUtils = new require('./../Classes/ExpenseUtils');
+const ExpenseUtils = new require('./../model/expense_utils')
 
-var eu = new ExpenseUtils();
+let eu = new ExpenseUtils()
 
 module.exports = function (bot) {
     return function (message, args) {
-        bot.sendMessage(new bot.classes.Message(message.chat.id, 'Yep, I\'m still alive!'));
+        bot.sendMessage(new bot.classes.Message(message.chat.id, 'Yep, I\'m still alive!'))
     }
-};
+}
