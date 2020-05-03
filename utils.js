@@ -86,18 +86,24 @@ function findExpenses(coll, message, args, callback) {
     })
 }
 
-function sumExpenses(coll, message, args, callback) {
+function summarizeExpenses(coll, message, args, callback) {
     let query = makeQuery(args, message.chat.id)
     if (!query) return callback(true, null)
 
+    const category = query.category
+    delete query.category
+
     coll.aggregate([
         { $match: query },
-        { $group: { _id: "$user", total: { $sum: "$amount" } } }
+        { $group: { _id: "$category", total: { $sum: "$amount" } } }
     ]).toArray((err, all) => {
         if (err) return callback(err)
-        if (all.length !== 1) return callback(true)
 
-        callback(null, all[0].total.toFixed(2))
+        all = all.filter(e => !category || e._id === category)
+        all = all.map(e => Object.assign(e, { _id: e._id || 'uncategorized', total: e.total.toFixed(2) }))
+        all.sort((e1, e2) => e1._id.localeCompare(e2._id))
+
+        callback(null, all)
     })
 }
 
@@ -114,7 +120,7 @@ function capitalize(string) {
 module.exports = {
     parseMessage,
     findExpenses,
-    sumExpenses,
+    summarizeExpenses,
     deleteExpenses,
     makeQuery,
     capitalize
