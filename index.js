@@ -5,7 +5,8 @@ const db = require('./db'),
     fs = require('fs'),
     path = require('path'),
     botlib = require('telegram-bot-sdk'),
-    utils = require('./utils')
+    utils = require('./utils'),
+    metrics = require('./metrics')
 
 const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0 ? cfg.RECOVER_FILE : path.normalize(__dirname + '/' + cfg.RECOVER_FILE)
 let recover = null,
@@ -31,7 +32,20 @@ const commands = {
 bot.setCommandCallbacks(commands)
 
 db.init(() => {
-    if (cfg.WEBHOOK_MODE) bot.listen(cfg.PORT, cfg.BIND_IP4, cfg.BOT_TOKEN)
+    if (cfg.WEBHOOK_MODE) {
+        bot.registerCustomRoute('get', '/metrics', async (req, res) => {
+            res.set('Content-Type', metrics.contentType)
+            res.end(await metrics.metrics())
+        })
+
+        bot.registerCustomRoute('get', '/health', (req, res) => {
+            const dbState = db.isConnected() ? 1 : 0
+            res.set('Content-Type', 'text/plain')
+            res.end(`app=1\ndb=${dbState}`)
+        })
+
+        bot.listen(cfg.PORT, cfg.BIND_IP4, cfg.BOT_TOKEN)
+    }
     else bot.getUpdates()
     expenses = db.getCollection()
 })

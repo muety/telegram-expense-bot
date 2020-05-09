@@ -27,5 +27,8 @@ To configure your bot, clone this repository, copy `config.example.json` to `con
 $ npm start
 ```
 
+## Metrics
+When using webhook mode, [Prometheus](https://prometheus.io) metrics are exposed at `/metrics`.
+
 ## License
 MIT @ [Ferdinand Mütsch](https://muetsch.io)

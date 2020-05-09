@@ -3,24 +3,21 @@ const mongo = require('mongodb').MongoClient,
 
 let collExpenses = null
 let _db = null
-
-module.exports = {
-    init: init,
-    close: close,
-    getCollection: function() {
-        return collExpenses
-    }
-}
+let _client = null
 
 function init(callback) {
-    mongo.connect(cfg.DB_URL, (err, db) => {
+    mongo.connect(cfg.DB_URL, { useUnifiedTopology: true }, (err, client) => {
         if (err) {
             console.log(err)
             process.exit(1)
+        } else {
+            console.log('Connected to database.')
         }
-        else console.log('Connected to database.')
-        _db = db
-        db.collection(cfg.DB_COLLECTION, (err, coll) => {
+
+        _client = client
+        _db = client.db()
+
+        _db.collection(cfg.DB_COLLECTION, (err, coll) => {
             if (err) return console.log(err)
             collExpenses = coll
             callback()
@@ -29,5 +26,18 @@ function init(callback) {
 }
 
 function close() {
-    _db.close()
+    return _client.close()
+}
+
+function isConnected() {
+    return _client.isConnected()
+}
+
+module.exports = {
+    init,
+    close,
+    isConnected,
+    getCollection: function() {
+        return collExpenses
+    }
 }
