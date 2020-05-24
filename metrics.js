@@ -39,6 +39,23 @@ const gTotalUsers = new Gauge({
     }
 })
 
+const gTotalActiveUsers = new Gauge({
+    name: `${prefix}active_users_total`,
+    help: 'Total number of active users, measured as such, who had at least one expense in the past week',
+    labelNames: [],
+    async collect() {
+        const startDate = new Date(new Date().setDate(new Date().getDate()-7))
+        const result = await db.getCollection()
+            .aggregate([
+                { $match: {timestamp: { $gt: startDate}}},
+                { $group: {_id: "$user", count: { $sum: 1 }}} 
+            ])
+            .toArray()
+
+        this.set(result.length)
+    }
+})
+
 const gTotalCategories = new Gauge({
     name: `${prefix}categories_total`,
     help: 'Total number of different registered categories',
