@@ -25,6 +25,7 @@ const commands = {
     new: require('./commands/new')(bot),
     get: require('./commands/get')(bot),
     list: require('./commands/list')(bot),
+    export: require('./commands/export')(bot),
     reset: require('./commands/reset')(bot),
     ping: require('./commands/ping')(bot),
     help: require('./commands/help')(bot)
@@ -66,11 +67,13 @@ function processNonCommand(message) {
 
     // A message consisting anything else - probably an expense to add
     let parsed = utils.parseMessage(message.text)
-    if (!parsed[0] || isNaN(parseFloat(parsed[0])) || !parsed[1]) return bot.sendMessage(new bot.classes.Message(message.chat.id, 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'), () => {})
+    if (!parsed[0] || isNaN(parseFloat(parsed[0])) || !parsed[1]) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
+        text: 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'
+    }))
     commands.new(message, [parsed[0], parsed[1], parsed[2] ? parsed[2] : null])
 }
 
-function processInlineQuery(query) {}
+function processInlineQuery(query) { }
 
 /* In the unwanted case the bot crashes due to a malformed message that causes an exception the bot can't handle, we at least need to save the current offset
  (is incremented by one in initialization) so that the bot won't get stuck in a loop fetching this message on restart and crashing again. */

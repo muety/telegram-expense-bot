@@ -11,6 +11,7 @@
         "NEW": "/new",
         "LIST": "/list",
         "GET": "/get",
+        "EXPORT": "/export",
         "HELP": "/help",
         "RESET": "/reset"
     },
