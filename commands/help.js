@@ -28,20 +28,26 @@ const text = `
         2. \`${cfg.COMMANDS.LIST} #food\` - all expenses in the _#food_ category in the current month.
         3. \`${cfg.COMMANDS.LIST} #food April\` - all expenses in the _#food_ category in April
         4. The same works for weekdays instead of months, e.g. \`Monday\`
+
+        *Exporting your expenses*
+        You can export your expenses to a CSV file to archive them or do further analyses in Excel or so. To create new export do:
+        1. \`${cfg.COMMANDS.EXPORT} April\` - export all expeses from April.
         
-        *Resetting you expenses*
+        *Resetting your expenses*
         To reset (i.e. delete) all your expenses for a given month or category, you can do the following:
         1. \`${cfg.COMMANDS.RESET} April\` - delete all expenses in April. Of course this works with any other month.
         2. \`${cfg.COMMANDS.RESET} #food\` - delete all expenses in the _#food_ category in the current month.
         3. \`${cfg.COMMANDS.RESET} #food April\` - delete all expenses in the _#food_ category in April
         4. The same works for weekdays instead of months, e.g. \`Monday\`
+
+        Code, bug reports, feature requests and further information on [GitHub](https://github.com/muety/telegram-expense-bot).
     `
 
 module.exports = function (bot) {
-    // return function (message, args) {
-    //     bot.sendMessage(new bot.classes.Message(message.chat.id, {
-    //         text,
-    //         parse_mode: 'Markdown'
-    //     }))
-    // }
+    return function (message, args) {
+        bot.sendMessage(new bot.classes.Message(message.chat.id, {
+            text,
+            parse_mode: 'Markdown'
+        }))
+    }
 }

@@ -1,0 +1,6 @@
+new - Add a new expense. See /help for how to do so.
+get - Get the total sum of your expenses ina specific month or category.
+list - List all your expenses for a given month or category.
+export - Export your expenses of a given month as CSV file.
+reset - Reset all your expenses for a given month or category.
+help - Get help on how to use this bot and how to invoke functions.
