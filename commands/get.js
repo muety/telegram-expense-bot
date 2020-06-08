@@ -12,7 +12,7 @@ module.exports = function (bot) {
             return bot.sendMessage(new bot.classes.Message(message.chat.id, {
                 text: 'Select a month to view expenses for.',
                 reply_markup: keyboard
-            }), () => { })
+            }))
         }
 
         let callback = function (err, all) {
@@ -26,7 +26,7 @@ module.exports = function (bot) {
                 text,
                 parse_mode: 'Markdown',
                 reply_markup: new bot.classes.ReplyKeyboardHide
-            }), () => { })
+            }))
         }
 
         utils.summarizeExpenses(db.getCollection(), message, args, callback)

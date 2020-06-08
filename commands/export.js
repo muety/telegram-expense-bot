@@ -7,7 +7,7 @@ module.exports = function (bot) {
         if (!args[0]) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text: `Please specify a month to list the expenses for.\nE.g. you can type \`${cfg.COMMANDS.EXPORT} April\` to get expenses for April`,
             parse_mode: 'Markdown'
-        }), () => { })
+        }))
 
         const callback = function (err, all) {
             if (err) return
@@ -20,7 +20,7 @@ module.exports = function (bot) {
                         document: file,
                         caption: `CSV export of your expenses for ${utils.capitalize(args[0])}`,
                         reply_markup: new bot.classes.ReplyKeyboardHide
-                    }), () => { })
+                    }))
                     return file
                 })
                 .then(utils.deleteFile)

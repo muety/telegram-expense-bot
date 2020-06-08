@@ -42,6 +42,6 @@ module.exports = function (bot) {
     //     bot.sendMessage(new bot.classes.Message(message.chat.id, {
     //         text,
     //         parse_mode: 'Markdown'
-    //     }), () => { })
+    //     }))
     // }
 }
