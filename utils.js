@@ -4,15 +4,15 @@ const Expense = require('./model/expense')
     , os = require('os')
     , path = require('path')
 
-function parseMessage(messageText) {
-    if (/-*\d+\.\d+[a-zA-z\ ]+/.test(messageText)) {
-        return [
-            parseFloat(messageText.match(/-*\d+\.\d+/)),
-            (messageText.match(/-*\d+\.\d+[a-zA-zäöüÄÖÜ\ ]+/)[0].match(/[a-zA-zäöüÄÖÜ\ ]+/)[0]).trim(),
-            /#\w+/.test(messageText) ? messageText.match(/#\w+/)[0] : null
-        ]
-    }
-    return false
+function parseExpenseInput(messageText) {
+    const re = /([0-9]+(?:\.[0-9]{0,2})?) ([\w\d \-\(\)\*\+"'%]+(?<! ))(#.+)?/g
+    const regexResult = [...(messageText.matchAll(re))][0]
+    if (!regexResult) return null
+    return [
+        parseFloat(regexResult[1]),
+        regexResult[2],
+        regexResult[3] || ''
+    ]
 }
 
 function makeQuery(args, user) {
@@ -65,9 +65,18 @@ function makeQuery(args, user) {
         cat = args[0]
     }
 
-    return cat
-        ? { timestamp: { $lt: to, $gte: from }, category: cat, user: user }
-        : { timestamp: { $lt: to, $gte: from }, user: user }
+    const query = {
+        timestamp: { $lt: to, $gte: from },
+        user: user,
+        $or: [
+            { isTemplate: { $exists: false } },
+            { isTemplate: false }
+        ]
+    }
+    if (cat) {
+        query = { ...query, category: cat }
+    }
+    return query
 }
 
 function findExpenses(coll, message, args, callback) {
@@ -82,7 +91,8 @@ function findExpenses(coll, message, args, callback) {
                 item.amount.toFixed(2),
                 item.description,
                 item.timestamp,
-                (item.category ? item.category : undefined)
+                item.category,
+                item.ref
             )
         )
         callback(null, expenses)
@@ -152,7 +162,7 @@ function deleteFile(filePath) {
 }
 
 module.exports = {
-    parseMessage,
+    parseExpenseInput,
     findExpenses,
     summarizeExpenses,
     deleteExpenses,

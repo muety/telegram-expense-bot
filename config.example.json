@@ -11,6 +11,8 @@
         "NEW": "/new",
         "LIST": "/list",
         "GET": "/get",
+        "REPEAT": "/repeat",
+        "STOP": "/stop",
         "EXPORT": "/export",
         "HELP": "/help",
         "RESET": "/reset"

@@ -1,6 +1,8 @@
 new - Add a new expense. See /help for how to do so.
+repeat - Add a recurring expense for every month. Same syntax as /new.
 get - Get the total sum of your expenses ina specific month or category.
 list - List all your expenses for a given month or category.
 export - Export your expenses of a given month as CSV file.
+stop - Cancel a recurring expense.
 reset - Reset all your expenses for a given month or category.
 help - Get help on how to use this bot and how to invoke functions.

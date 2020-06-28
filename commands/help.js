@@ -47,7 +47,8 @@ module.exports = function (bot) {
     return function (message, args) {
         bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text,
-            parse_mode: 'Markdown'
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true
         }))
     }
 }

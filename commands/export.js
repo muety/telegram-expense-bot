@@ -5,7 +5,7 @@ const cfg = require('./../config')
 module.exports = function (bot) {
     return function (message, args) {
         if (!args[0]) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
-            text: `Please specify a month to list the expenses for.\nE.g. you can type \`${cfg.COMMANDS.EXPORT} April\` to get expenses for April`,
+            text: `Please specify a month to download the expenses for.\nE.g. you can type \`${cfg.COMMANDS.EXPORT} April\` to get expenses for April`,
             parse_mode: 'Markdown'
         }))
 

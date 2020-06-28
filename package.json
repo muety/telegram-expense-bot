@@ -22,6 +22,7 @@
     "dependencies": {
         "dateformat": "^1.0.12",
         "mongodb": "^3.5.0",
+        "node-cron": "^2.0.3",
         "prom-client": "git://github.com/zbjornson/prom-client.git#zb/collect",
         "telegram-bot-sdk": "^0.3.1"
     }

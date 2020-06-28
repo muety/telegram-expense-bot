@@ -6,9 +6,13 @@ const db = require('./db'),
     path = require('path'),
     botlib = require('telegram-bot-sdk'),
     utils = require('./utils'),
-    metrics = require('./metrics')
+    metrics = require('./metrics'),
+    jobs = require('./jobs')
 
-const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0 ? cfg.RECOVER_FILE : path.normalize(__dirname + '/' + cfg.RECOVER_FILE)
+const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0
+    ? cfg.RECOVER_FILE
+    : path.normalize(__dirname + '/' + cfg.RECOVER_FILE)
+
 let recover = null,
     initialOffset = null,
     expenses = null
@@ -20,19 +24,32 @@ try {
     initialOffset = 0
 }
 
-const bot = botlib(cfg.BOT_TOKEN, null, processNonCommand, processInlineQuery, initialOffset)
+const bot = botlib(
+    cfg.BOT_TOKEN,
+    null,
+    processNonCommand,
+    processInlineQuery,
+    initialOffset
+)
+
 const commands = {
     new: require('./commands/new')(bot),
     get: require('./commands/get')(bot),
     list: require('./commands/list')(bot),
+    repeat: require('./commands/repeat')(bot),
+    stop: require('./commands/stop')(bot),
     export: require('./commands/export')(bot),
     reset: require('./commands/reset')(bot),
     ping: require('./commands/ping')(bot),
     help: require('./commands/help')(bot)
 }
+
 bot.setCommandCallbacks(commands)
 
 db.init(() => {
+    jobs.runDefault(bot)
+    jobs.scheduleDefault(bot)
+
     if (cfg.WEBHOOK_MODE) {
         bot.registerCustomRoute('get', '/metrics', async (req, res) => {
             res.set('Content-Type', metrics.contentType)
@@ -66,7 +83,7 @@ function processNonCommand(message) {
     }
 
     // A message consisting anything else - probably an expense to add
-    let parsed = utils.parseMessage(message.text)
+    let parsed = utils.parseExpenseInput(message.text)
     if (!parsed[0] || isNaN(parseFloat(parsed[0])) || !parsed[1]) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
         text: 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'
     }))
