@@ -7,11 +7,20 @@ const db = require('./db'),
     botlib = require('telegram-bot-sdk'),
     utils = require('./utils'),
     metrics = require('./metrics'),
-    jobs = require('./jobs')
+    jobs = require('./jobs'),
+    assert = require('assert')
 
 const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0
     ? cfg.RECOVER_FILE
     : path.normalize(__dirname + '/' + cfg.RECOVER_FILE)
+
+const requiredCommands = ['new', 'list', 'get', 'repeat', 'stop', 'export', 'help', 'reset']
+requiredCommands.forEach(k => {
+    assert(
+        cfg.COMMANDS.hasOwnProperty(k) ||
+        cfg.COMMANDS.hasOwnProperty(k.toUpperCase())
+    )
+})
 
 let recover = null,
     initialOffset = null,
@@ -32,17 +41,9 @@ const bot = botlib(
     initialOffset
 )
 
-const commands = {
-    new: require('./commands/new')(bot),
-    get: require('./commands/get')(bot),
-    list: require('./commands/list')(bot),
-    repeat: require('./commands/repeat')(bot),
-    stop: require('./commands/stop')(bot),
-    export: require('./commands/export')(bot),
-    reset: require('./commands/reset')(bot),
-    ping: require('./commands/ping')(bot),
-    help: require('./commands/help')(bot)
-}
+const commands = Object.keys(cfg.COMMANDS)
+    .map(k => k.toLowerCase())
+    .reduce((obj, k) => Object.assign(obj, { [k]: require(`./commands/${k}`)(bot) }))
 
 bot.setCommandCallbacks(commands)
 
