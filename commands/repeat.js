@@ -24,7 +24,8 @@ module.exports = function (bot) {
                     text: 'Sorry, something went wrong while setting up your recurring expense. Please try again.'
                 }))
                 else bot.sendMessage(new bot.classes.Message(message.chat.id, {
-                    text: 'A new recurring expense has been scheduled and will first be counted next month.'
+                    text: 'A new recurring expense has been scheduled and will first be counted next month. You can cancel it again using `/stop`.',
+                    parse_mode: 'Markdown'
                 }))
             })
     }

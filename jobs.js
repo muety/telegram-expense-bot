@@ -36,7 +36,8 @@ function recurringExpensesJob(bot) {
         const allTemplates = await new Promise((resolve, reject) => {
             coll
                 .find({
-                    isTemplate: true
+                    isTemplate: true,
+                    timestamp: { $lt: from }
                 }, {
                     projection: { isTemplate: 0 }
                 })
