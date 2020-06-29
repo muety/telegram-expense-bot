@@ -43,7 +43,7 @@ const bot = botlib(
 
 const commands = Object.keys(cfg.COMMANDS)
     .map(k => k.toLowerCase())
-    .reduce((obj, k) => Object.assign(obj, { [k]: require(`./commands/${k}`)(bot) }))
+    .reduce((obj, k) => Object.assign(obj, { [k]: require(`./commands/${k}`)(bot) }), {})
 
 bot.setCommandCallbacks(commands)
 
