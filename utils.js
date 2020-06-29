@@ -65,7 +65,7 @@ function makeQuery(args, user) {
         cat = args[0]
     }
 
-    const query = {
+    let query = {
         timestamp: { $lt: to, $gte: from },
         user: user,
         $or: [
