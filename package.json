@@ -1,6 +1,6 @@
 {
     "name": "telegram-expense-bot",
-    "version": "1.5.8",
+    "version": "1.5.9",
     "description": "A bot that helps you manage and track your daily expenses.",
     "main": "index.js",
     "scripts": {
