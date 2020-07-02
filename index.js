@@ -86,7 +86,7 @@ function processNonCommand(message) {
     // A message consisting anything else - probably an expense to add
     const [ amount, description, category ] = utils.parseExpenseInput(message.text) || []
     if (!amount) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
-        text: 'Sorry, it looks like I didn\'t understand you. Maybe you forgot the decimal point in a number? Please try again.'
+        text: 'Sorry, it looks like I didn\'t understand you. Please try again.'
     }))
     commands.new(message, [amount, description, category])
 }

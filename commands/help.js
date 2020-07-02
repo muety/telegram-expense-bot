@@ -12,7 +12,7 @@ The following examples will show you various ways to add a new expense.
 
 You can simply leave out the category (which is always defined by a hash sign) - this is just for you to have a clearer overview and separation later.
 
-*Please note:* You always need to type the decimal separator dot (e.g. _1.0_ instead of simply _1_). Further you can also type _negative_ number if you had an income or want to compensate an expense.
+*Please note:* You can also type _negative_ number if you had an income or want to compensate an expense.
 
 
 *Getting your expenses*

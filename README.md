@@ -22,6 +22,11 @@ To configure your bot, clone this repository, copy `config.example.json` to `con
 * `BOT_NAME`: the bot's name, e.g. _"ExpenseBot"_ in my case
 * `BOT_TELEGRAM_USERNAME`: the bot's actual unique Telegram username, e.g. _"@ExpenseBot"_ in my case (note that this can differ from the `BOT_NAME`, which is not unique)
 
+### Install
+```bash
+$ npm install
+```
+
 ### Run
 ```bash
 $ npm start
