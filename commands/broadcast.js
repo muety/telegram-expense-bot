@@ -16,7 +16,8 @@ module.exports = function (bot) {
                 const sendTo = dry ? users.filter(uid => uid === user) : users
                 sendTo.forEach(uid => bot.sendMessage(new bot.classes.Message(uid, {
                         text: regexResult[2],
-                        parse_mode: 'Markdown'
+                        parse_mode: 'Markdown',
+                        disable_web_page_preview: true
                     })
                 ))
 
