@@ -9,6 +9,7 @@
     "BIND_IP4": "127.0.0.1",
     "COMMANDS": {
         "NEW": "/new",
+        "START": "/start",
         "LIST": "/list",
         "GET": "/get",
         "REPEAT": "/repeat",

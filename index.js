@@ -14,7 +14,7 @@ const recoveryFile = cfg.RECOVER_FILE.indexOf('/') === 0
     ? cfg.RECOVER_FILE
     : path.normalize(__dirname + '/' + cfg.RECOVER_FILE)
 
-const requiredCommands = ['new', 'list', 'get', 'repeat', 'stop', 'export', 'help', 'reset']
+const requiredCommands = ['start', 'new', 'list', 'get', 'repeat', 'stop', 'export', 'help', 'reset']
 requiredCommands.forEach(k => {
     assert(
         cfg.COMMANDS.hasOwnProperty(k) ||
