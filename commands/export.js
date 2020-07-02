@@ -27,6 +27,6 @@ module.exports = function (bot) {
                 .catch(console.error)
         }
 
-        utils.findExpenses(db.getCollection(), message, args, callback)
+        utils.findExpenses(message, args, callback)
     }
 }

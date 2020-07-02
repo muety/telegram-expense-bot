@@ -18,6 +18,6 @@ module.exports = function (bot) {
                 parse_mode: new bot.classes.ReplyKeyboardHide
             }))
         }
-        utils.deleteExpenses(db.getCollection(), message, args, callback)
+        utils.deleteExpenses(message, args, callback)
     }
 }

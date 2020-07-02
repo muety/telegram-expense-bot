@@ -1,8 +1,11 @@
+// TODO: refactor this whole file!
+
 const Expense = require('./model/expense')
     , cfg = require('./config')
     , fs = require('fs')
     , os = require('os')
     , path = require('path')
+    , db = require("./db")
 
 function parseExpenseInput(messageText) {
     const re = /([0-9]+(?:\.[0-9]{0,2})?) ([\w\d \-\(\)\*\+"'%]+(?<! ))(?: (#.+))?/g
@@ -79,51 +82,59 @@ function makeQuery(args, user) {
     return query
 }
 
-function findExpenses(coll, message, args, callback) {
+function findExpenses(message, args, callback) {
     let query = makeQuery(args, message.chat.id)
     if (!query) return callback(true, null)
 
-    coll.find(query).toArray((err, all) => {
-        if (err) return callback(err)
-        let expenses = all.map(
-            item => new Expense(
-                item.user,
-                item.amount.toFixed(2),
-                item.description,
-                item.timestamp,
-                item.category,
-                item.ref
+    db
+        .getCollection()
+        .find(query)
+        .toArray((err, all) => {
+            if (err) return callback(err)
+            let expenses = all.map(
+                item => new Expense(
+                    item.user,
+                    item.amount.toFixed(2),
+                    item.description,
+                    item.timestamp,
+                    item.category,
+                    item.ref
+                )
             )
-        )
-        callback(null, expenses)
-    })
+            callback(null, expenses)
+        })
 }
 
-function summarizeExpenses(coll, message, args, callback) {
+function summarizeExpenses(message, args, callback) {
     let query = makeQuery(args, message.chat.id)
     if (!query) return callback(true, null)
 
     const category = query.category
     delete query.category
 
-    coll.aggregate([
-        { $match: query },
-        { $group: { _id: "$category", total: { $sum: "$amount" } } }
-    ]).toArray((err, all) => {
-        if (err) return callback(err)
+    db
+        .getCollection()
+        .aggregate([
+            { $match: query },
+            { $group: { _id: "$category", total: { $sum: "$amount" } } }
+        ])
+        .toArray((err, all) => {
+            if (err) return callback(err)
 
-        all = all.filter(e => !category || e._id === category)
-        all = all.map(e => Object.assign(e, { _id: e._id || 'uncategorized', total: e.total.toFixed(2) }))
-        all.sort((e1, e2) => e1._id.localeCompare(e2._id))
+            all = all.filter(e => !category || e._id === category)
+            all = all.map(e => Object.assign(e, { _id: e._id || 'uncategorized', total: e.total.toFixed(2) }))
+            all.sort((e1, e2) => e1._id.localeCompare(e2._id))
 
-        callback(null, all)
-    })
+            callback(null, all)
+        })
 }
 
-function deleteExpenses(coll, message, args, callback) {
+function deleteExpenses(message, args, callback) {
     let query = makeQuery(args, message.chat.id)
     if (!query) return callback(true, null)
-    coll.remove(query, callback)
+    db
+        .getCollection()
+        .remove(query, callback)
 }
 
 function capitalize(string) {
@@ -161,6 +172,82 @@ function deleteFile(filePath) {
     })
 }
 
+async function countExpenses() {
+    return await db
+        .getCollection()
+        .estimatedDocumentCount()
+}
+
+async function countUsers() {
+    const result = await db
+        .getCollection()
+        .aggregate([
+            { $group: { _id: "$user" } },
+            { $group: { _id: null, count: { $sum: 1 } } },
+        ])
+        .toArray()
+
+    return result.length === 1
+        ? result[0].count
+        : 0
+}
+
+async function countCategories() {
+    const result = await db
+      .getCollection()
+      .aggregate([
+        { $group: { _id: "$category" } },
+        { $group: { _id: null, count: { $sum: 1 } } },
+      ])
+      .toArray()
+
+      return result.length === 1
+        ? result[0].count
+        : 0
+}
+
+async function getActiveUsers() {
+    const startDate = new Date(new Date().setDate(new Date().getDate() - 7));
+
+    const result = await db
+        .getCollection()
+        .aggregate([
+            { $match: { timestamp: { $gt: startDate } } },
+            { $group: { _id: "$user", count: { $sum: 1 } } },
+        ])
+        .toArray()
+
+    return result
+        .map(e => e._id)
+}
+
+async function sumTotal() {
+    const result = await db
+      .getCollection()
+      .aggregate([
+        {
+          $match: {
+            $and: [
+              { amount: { $gte: -10000 } },
+              { amount: { $lte: 10000 } },
+              {
+                $or: [
+                  { isTemplate: { $exists: false } },
+                  { isTemplate: false },
+                ],
+              },
+            ],
+          },
+        },
+        { $group: { _id: null, total: { $sum: "$amount" } } },
+      ])
+      .toArray()
+
+      return result.length === 1
+        ? result[0].total
+        : 0
+}
+
 module.exports = {
     parseExpenseInput,
     findExpenses,
@@ -170,5 +257,10 @@ module.exports = {
     capitalize,
     asCsv,
     writeTempFile,
-    deleteFile
+    deleteFile,
+    countExpenses,
+    countUsers,
+    countCategories,
+    getActiveUsers,
+    sumTotal
 }

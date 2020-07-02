@@ -17,6 +17,6 @@ module.exports = function (bot) {
             }), () => {})
         }
 
-        utils.findExpenses(db.getCollection(), message, args, callback)
+        utils.findExpenses(message, args, callback)
     }
 }
