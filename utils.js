@@ -8,7 +8,7 @@ const Expense = require('./model/expense')
     , db = require("./db")
 
 function parseExpenseInput(messageText) {
-    const re = /([0-9]+(?:\.[0-9]{0,2})?) ([\w\d \-\(\)\*\+"'%]+(?<! ))(?: (#.+))?/g
+    const re = /(\-?[0-9]+(?:\.[0-9]{0,2})?) ([\w\d \-\(\)\*\+"'%]+(?<! ))(?: (#.+))?/g
     const regexResult = [...(messageText.matchAll(re))][0]
     if (!regexResult) return null
     return [
