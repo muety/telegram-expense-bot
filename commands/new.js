@@ -19,10 +19,11 @@ module.exports = function (bot) {
             category: category
         }, (err, ok) => {
             if (err) bot.sendMessage(new bot.classes.Message(message.chat.id, {
-                text: 'Sorry, something went wrong while saving your expense. Please try again.'
+                text: '❌ Sorry, something went wrong while saving your expense. Please try again.'
             }))
             else bot.sendMessage(new bot.classes.Message(message.chat.id, {
-                text: 'Your expense has been saved.'
+                text: `✅ Added *${amount}*.`,
+                parse_mode: 'Markdown'
             }))
         })
     }

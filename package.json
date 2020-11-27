@@ -1,6 +1,6 @@
 {
     "name": "telegram-expense-bot",
-    "version": "1.6.3",
+    "version": "1.7.0",
     "description": "A bot that helps you manage and track your daily expenses.",
     "main": "index.js",
     "scripts": {
@@ -24,6 +24,7 @@
         "mongodb": "^3.5.0",
         "node-cron": "^2.0.3",
         "prom-client": "git://github.com/siimon/prom-client",
+        "safe-eval": "^0.4.1",
         "telegram-bot-sdk": "^0.3.1"
     }
 }

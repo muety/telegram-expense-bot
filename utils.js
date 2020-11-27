@@ -6,16 +6,32 @@ const Expense = require('./model/expense')
     , os = require('os')
     , path = require('path')
     , db = require("./db")
+    , safeEval = require('safe-eval')
 
 function parseExpenseInput(messageText) {
-    const re = /(\-?[0-9]+(?:\.[0-9]{0,2})?) ([^#]+[^ #])(?: (#.+))?/g
-    const regexResult = [...(messageText.matchAll(re))][0]
-    if (!regexResult) return null
+    const commandRe = /((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\s]))+) ([^#]+[^ #])(?: (#.+))?/g
+    const commandParts = [...(messageText.matchAll(commandRe))][0]
+    if (!commandParts) return null
+
+    const amountRe = /^(\-?[0-9]+(?:\.[0-9]{0,2})?)$/g
+    const isExpression = !amountRe.test(commandParts[1].trim())
+
+    const amount = round((
+        isExpression
+            ? safeEval(commandParts[1].replace(/[a-zA-Z]/g, ''))
+            : parseFloat(commandParts[1]) * 100)
+        , 2)
+
     return [
-        parseFloat(regexResult[1]),
-        regexResult[2],
-        regexResult[3] || ''
+        amount,                 // amount
+        commandParts[2],         // description
+        commandParts[3] || ''    // category
     ]
+}
+
+function round(value, places) {
+    const power = Math.pow(10, places);
+    return Math.round(value * power) / power;
 }
 
 function makeQuery(args, user) {
@@ -194,14 +210,14 @@ async function countUsers() {
 
 async function countCategories() {
     const result = await db
-      .getCollection()
-      .aggregate([
-        { $group: { _id: "$category" } },
-        { $group: { _id: null, count: { $sum: 1 } } },
-      ])
-      .toArray()
+        .getCollection()
+        .aggregate([
+            { $group: { _id: "$category" } },
+            { $group: { _id: null, count: { $sum: 1 } } },
+        ])
+        .toArray()
 
-      return result.length === 1
+    return result.length === 1
         ? result[0].count
         : 0
 }
@@ -223,27 +239,27 @@ async function getActiveUsers() {
 
 async function sumTotal() {
     const result = await db
-      .getCollection()
-      .aggregate([
-        {
-          $match: {
-            $and: [
-              { amount: { $gte: -10000 } },
-              { amount: { $lte: 10000 } },
-              {
-                $or: [
-                  { isTemplate: { $exists: false } },
-                  { isTemplate: false },
-                ],
-              },
-            ],
-          },
-        },
-        { $group: { _id: null, total: { $sum: "$amount" } } },
-      ])
-      .toArray()
+        .getCollection()
+        .aggregate([
+            {
+                $match: {
+                    $and: [
+                        { amount: { $gte: -10000 } },
+                        { amount: { $lte: 10000 } },
+                        {
+                            $or: [
+                                { isTemplate: { $exists: false } },
+                                { isTemplate: false },
+                            ],
+                        },
+                    ],
+                },
+            },
+            { $group: { _id: null, total: { $sum: "$amount" } } },
+        ])
+        .toArray()
 
-      return result.length === 1
+    return result.length === 1
         ? result[0].total
         : 0
 }
