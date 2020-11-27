@@ -24,12 +24,12 @@ To configure your bot, clone this repository, copy `config.example.json` to `con
 
 ### Install
 ```bash
-$ npm install
+$ yarn
 ```
 
 ### Run
 ```bash
-$ npm start
+$ yarn start
 ```
 
 ## Metrics
