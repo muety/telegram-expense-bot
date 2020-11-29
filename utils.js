@@ -19,7 +19,7 @@ function parseExpenseInput(messageText) {
     const amount = round((
         isExpression
             ? safeEval(commandParts[1].replace(/[a-zA-Z]/g, ''))
-            : parseFloat(commandParts[1]) * 100)
+            : parseFloat(commandParts[1]))
         , 2)
 
     return [
