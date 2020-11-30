@@ -11,14 +11,14 @@ const Expense = require('./model/expense')
 function parseExpenseInput(messageText) {
     const commandRe = /((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\s]))+) ([^#]+[^ #])(?: (#.+))?/g
     const commandParts = [...(messageText.matchAll(commandRe))][0]
-    if (!commandParts) return null
+    if (!commandParts) return [null, null, null]
 
     const amountRe = /^(\-?[0-9]+(?:\.[0-9]{0,2})?)$/g
     const isExpression = !amountRe.test(commandParts[1].trim())
 
     const amount = round((
         isExpression
-            ? safeEval(commandParts[1].replace(/[a-zA-Z]/g, ''))
+            ? tryEval(commandParts[1].replace(/[a-zA-Z]/g, ''))
             : parseFloat(commandParts[1]))
         , 2)
 
@@ -27,11 +27,6 @@ function parseExpenseInput(messageText) {
         commandParts[2],         // description
         commandParts[3] || ''    // category
     ]
-}
-
-function round(value, places) {
-    const power = Math.pow(10, places);
-    return Math.round(value * power) / power;
 }
 
 function makeQuery(args, user) {
@@ -264,6 +259,20 @@ async function sumTotal() {
         : 0
 }
 
+function round(value, places) {
+    if (!value) return null
+    const power = Math.pow(10, places);
+    return Math.round(value * power) / power;
+}
+
+function tryEval(command) {
+    try {
+        return safeEval(command)
+    } catch (e) {
+        return null
+    }
+}
+
 module.exports = {
     parseExpenseInput,
     findExpenses,
@@ -278,5 +287,6 @@ module.exports = {
     countUsers,
     countCategories,
     getActiveUsers,
-    sumTotal
+    sumTotal,
+    round
 }
