@@ -9,7 +9,7 @@ const Expense = require('./model/expense')
     , safeEval = require('safe-eval')
 
 function parseExpenseInput(messageText) {
-    const commandRe = /((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\s]))+) ([^#]+[^ #])(?: (#.+))?/g
+    const commandRe = /^((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/g
     const commandParts = [...(messageText.matchAll(commandRe))][0]
     if (!commandParts) return [null, null, null]
 
@@ -24,8 +24,8 @@ function parseExpenseInput(messageText) {
 
     return [
         amount,                 // amount
-        commandParts[2],         // description
-        commandParts[3] || ''    // category
+        commandParts[2],        // description
+        commandParts[3] || ''   // category
     ]
 }
 
