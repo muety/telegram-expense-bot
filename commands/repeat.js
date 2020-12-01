@@ -1,10 +1,12 @@
 const cfg = require('./../config')
     , db = require('./../db')
     , utils = require('./../utils')
+    , CMD = cfg.COMMANDS.REPEAT
 
 module.exports = function (bot) {
     return function (message, args) {
-        const [ amount, description, category ] = utils.parseExpenseInput(message.text) || []
+        const inputText = message.text.replace(CMD, '').trim()
+        const [ amount, description, category ] = utils.parseExpenseInput(inputText) || []
 
         if (!amount)  return bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text: `Invalid format. You need to send a message like \`${cfg.COMMANDS.REPEAT} 1.99 Cake #food\` to set up a recurring expense.`,

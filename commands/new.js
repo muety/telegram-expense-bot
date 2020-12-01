@@ -1,10 +1,12 @@
 const db = require('./../db')
     , cfg = require('./../config')
     , utils = require('./../utils')
+    , CMD = cfg.COMMANDS.NEW
 
 module.exports = function (bot) {
     return function (message, args) {
-        const [ amount, description, category ] = utils.parseExpenseInput(message.text) || []
+        const inputText = message.text.replace(CMD, '').trim()
+        const [ amount, description, category ] = utils.parseExpenseInput(inputText) || []
 
         if (!amount) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text: `Sorry, your command must look like this: \`${cfg.COMMANDS.NEW} 1.99 Lunch\`\nOptionally you could also specify a category using a hash tag like this:\`${cfg.COMMANDS.NEW} 1.99 Lunch #food\`. You can also simply leave out the \`${cfg.COMMANDS.NEW}\` and only type \`1.99 Lunch #food.\``,
