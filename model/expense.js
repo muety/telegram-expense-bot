@@ -14,7 +14,7 @@ class Expense {
 
     toString(noTimestamp) {
         let d = new Date(this.timestamp);
-        return `${!noTimestamp ? df(d, 'mmmm dS') + ' ' : ''}${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
+        return `${!noTimestamp ? df(d, 'mm/dd/yyyy') + ' – ' : ''}${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
     }
 }
 

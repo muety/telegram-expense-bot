@@ -32,49 +32,62 @@ function parseExpenseInput(messageText) {
 function makeQuery(args, user) {
     if (!user) return false
 
-    let date = new Date()
+    const y = new Date().getFullYear()
+    const m = new Date().getMonth()
+    const d = new Date().getDay()
+    const date = new Date().getDate()
+
     let cat, from, to
 
     if (/^#\w+$/.test(args[0]) && !args[1]) {
         // /get #food
-        from = new Date(date.getFullYear(), date.getMonth(), 1),
-            to = new Date(date.getFullYear(), date.getMonth() + 1, 1),
+        from = new Date(y, m, 1),
+            to = new Date(y, m + 1, 1),
             cat = args[0]
     } else if (/^[A-Za-z]+$/.test(args[0]) && !args[1]) {
         // /get january
-        let capitalized = capitalize(args[0])
+        const capitalized = capitalize(args[0])
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1)
+            const month = cfg.MONTHS[capitalized]
+            const year = y - (m - month < 0)
+            from = new Date(year, month, 1),
+                to = new Date(year, month + 1, 1)
         } else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
-                to = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized]) + 1)
+            const day = d - cfg.WEEKDAYS[capitalized]
+            from = new Date(y, m, date - day),
+                to = new Date(y, m, date - day + 1)
         }
     } else if (/^[A-Za-z]+$/.test(args[0]) && /^#\w+$/.test(args[1])) {
         // /get january #food
-        let capitalized = capitalize(args[0])
+        const capitalized = capitalize(args[0])
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1)
+            const month = cfg.MONTHS[capitalized]
+            const year = y - (m - month < 0)
+            from = new Date(year, month, 1),
+                to = new Date(year, month + 1, 1)
         }
         else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
-                to = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized]) + 1)
+            const day = d - cfg.WEEKDAYS[capitalized]
+            from = new Date(y, m, date - day),
+                to = new Date(y, m, date - day + 1)
         }
         cat = args[1]
     } else if (/^[A-Za-z]+$/.test(args[1]) && /^#\w+$/.test(args[0])) {
         // /get #food january
-        let capitalized = capitalize(args[1])
+        const capitalized = capitalize(args[1])
 
         if (cfg.MONTHS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), cfg.MONTHS[capitalized], 1),
-                to = new Date(date.getFullYear(), cfg.MONTHS[capitalized] + 1, 1)
+            const month = cfg.MONTHS[capitalized]
+            const year = y - (m - month < 0)
+            from = new Date(year, month, 1),
+                to = new Date(year, month + 1, 1)
         }
         else if (cfg.WEEKDAYS.hasOwnProperty(capitalized)) {
-            from = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized])),
-                to = new Date(date.getFullYear(), date.getMonth(), date.getDate() - (date.getDay() - cfg.WEEKDAYS[capitalized]) + 1)
+            const day = d - cfg.WEEKDAYS[capitalized]
+            from = new Date(y, m, date - day),
+                to = new Date(y, m, date - day + 1)
         }
         cat = args[0]
     }
@@ -271,6 +284,15 @@ function tryEval(command) {
     } catch (e) {
         return null
     }
+}
+
+// day of year
+// https://stackoverflow.com/a/8619946/3112139
+function doy(date) {
+    const start = new Date(date.getFullYear(), 0, 0)
+    const diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000)
+    const oneDay = 1000 * 60 * 60 * 24
+    return Math.floor(diff / oneDay)
 }
 
 module.exports = {
