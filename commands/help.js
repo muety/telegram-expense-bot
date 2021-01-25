@@ -1,5 +1,7 @@
 const cfg = require('./../config')
     , package = require('./../package.json')
+    , LIMITS = require('./../config.json').RATE_LIMITS || {}
+    , RateLimiter = require('./../middleware/rate_limit')
 
 const text = `
 Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
@@ -47,7 +49,13 @@ Version: \`${package.version}\`
 `
 
 module.exports = function (bot) {
+    const limiter = new RateLimiter(24 * 60 * 60, LIMITS['help'] || -1)
+
     return function (message, args) {
+        if (!limiter.check(message.chat.id, new Date(message.date * 1000))) {
+            return
+        }
+        
         bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text,
             parse_mode: 'Markdown',

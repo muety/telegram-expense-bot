@@ -2,9 +2,17 @@ const cfg = require('./../config')
     , utils = require('./../utils')
     , db = require('./../db')
     , Expense = require('./../model/expense')
+    , LIMITS = require('./../config.json').RATE_LIMITS || {}
+    , RateLimiter = require('./../middleware/rate_limit')
 
 module.exports = function (bot) {
+    const limiter = new RateLimiter(24 * 60 * 60, LIMITS['stop'] || -1)
+
     return async function (message, args) {
+        if (!limiter.check(message.chat.id, new Date(message.date * 1000))) {
+            return
+        }
+
         const coll = db.getCollection()
 
         let userTemplates = await (new Promise((resolve, reject) => {

@@ -2,9 +2,17 @@ const cfg = require('./../config')
     , db = require('./../db')
     , utils = require('./../utils')
     , CMD = cfg.COMMANDS.REPEAT
+    , LIMITS = require('./../config.json').RATE_LIMITS || {}
+    , RateLimiter = require('./../middleware/rate_limit')
 
 module.exports = function (bot) {
+    const limiter = new RateLimiter(24 * 60 * 60, LIMITS['repeat'] || -1)
+
     return function (message, args) {
+        if (!limiter.check(message.chat.id, new Date(message.date * 1000))) {
+            return
+        }
+
         const inputText = message.text.replace(CMD, '').trim()
         const [ amount, description, category ] = utils.parseExpenseInput(inputText) || []
 

@@ -1,9 +1,16 @@
 const cfg = require('./../config')
-    , db = require('./../db')
     , utils = require('./../utils')
+    , LIMITS = require('./../config.json').RATE_LIMITS || {}
+    , RateLimiter = require('./../middleware/rate_limit')
 
 module.exports = function (bot) {
+    const limiter = new RateLimiter(24 * 60 * 60, LIMITS['get'] || -1)
+
     return function (message, args) {
+        if (!limiter.check(message.chat.id, new Date(message.date * 1000))) {
+            return
+        }
+
         if (!args[0] && !args[1]) {
             let keyboard = new bot.classes.ReplyKeyboardMarkup(4, null, true, null)
             Object.entries(cfg.MONTHS).forEach(e => {
