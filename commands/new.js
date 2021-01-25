@@ -17,7 +17,7 @@ module.exports = function (bot) {
             user: message.chat.id,
             amount: amount,
             description: description,
-            timestamp: new Date(),
+            timestamp: new Date(message.date * 1000),
             category: category
         }, (err, ok) => {
             if (err) bot.sendMessage(new bot.classes.Message(message.chat.id, {

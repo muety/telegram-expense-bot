@@ -18,7 +18,7 @@ module.exports = function (bot) {
                 user: message.chat.id,
                 amount: amount,
                 description: description,
-                timestamp: new Date(),
+                timestamp: new Date(message.date * 1000),
                 category: category,
                 isTemplate: true
             }, (err, ok) => {
