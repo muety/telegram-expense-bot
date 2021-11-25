@@ -1,7 +1,5 @@
 'use strict';
 
-const df = require('dateformat');
-
 class Expense {
     constructor(user, amount, description, timestamp, category, ref) {
         this.user = user;
@@ -14,7 +12,7 @@ class Expense {
 
     toString(noTimestamp) {
         let d = new Date(this.timestamp);
-        return `${!noTimestamp ? df(d, 'mm/dd/yyyy') + ' – ' : ''}${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
+        return `${!noTimestamp ? d.toLocaleDateString('en') + ' – ' : ''}${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
     }
 }
 
