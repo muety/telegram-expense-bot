@@ -6,10 +6,10 @@ const Expense = require('./model/expense')
     , os = require('os')
     , path = require('path')
     , db = require("./db")
-    , safeEval = require('safe-eval')
+    , safeEval = require('safe-eval-2')
 
 function parseExpenseInput(messageText) {
-    const commandRe = /^((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/g
+    const commandRe = /^((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/g
     const commandParts = [...(messageText.matchAll(commandRe))][0]
     if (!commandParts) return [null, null, null]
 
