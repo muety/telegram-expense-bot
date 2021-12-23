@@ -25,7 +25,8 @@ function parseExpenseInput(messageText) {
     return [
         amount,                 // amount
         commandParts[2],        // description
-        commandParts[3] || ''   // category
+        commandParts[3],
+        commandParts[4] || ''   // category
     ]
 }
 
@@ -121,6 +122,7 @@ function findExpenses(message, args, callback) {
                     item.amount.toFixed(2),
                     item.description,
                     item.timestamp,
+                    item.subcategory,
                     item.category,
                     item.ref
                 )
@@ -168,7 +170,7 @@ function capitalize(string) {
 function asCsv(expenses) {
     const header = `amount,description,category,date,timestamp`
     const body = expenses
-        .map(e => [e.amount, e.description, e.category, e.timestamp, e.timestamp.getTime()].join(','))
+        .map(e => [e.amount, e.description, e.subcategory, e.category, e.timestamp, e.timestamp.getTime()].join(','))
         .join('\n')
     return `${header}\n${body}`
 }
