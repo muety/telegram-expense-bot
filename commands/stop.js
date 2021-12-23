@@ -31,7 +31,7 @@ module.exports = function (bot) {
             if (!userTemplates.length) return '_none_'
             return userTemplates
                 .map(t => new Expense(
-                    t.user, t.amount.toFixed(2), t.description, t.timestamp, t.category, null
+                    t.user, t.amount.toFixed(2), t.description, t.timestamp, t.subcategory, t.category, null
                 ))
                 .map((t, i) => `**${i + 1}** – ${t.toString(true)}`)
                 .join('\n')
@@ -60,7 +60,7 @@ module.exports = function (bot) {
                     parse_mode: 'Markdown'
                 }))
             })
-            .catch(() => {})
+            .catch(() => { })
 
         const callback = function (err, all) {
             if (err) return

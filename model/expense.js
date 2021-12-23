@@ -5,6 +5,7 @@ class Expense {
         this.user = user;
         this.amount = amount;
         this.description = description;
+        this.subcategory = subcategory;
         this.category = category;
         this.timestamp = timestamp;
         this.ref = ref
@@ -12,7 +13,7 @@ class Expense {
 
     toString(noTimestamp) {
         let d = new Date(this.timestamp);
-        return `${!noTimestamp ? d.toLocaleDateString('en') + ' – ' : ''}${this.amount} - ${this.description}${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
+        return `${!noTimestamp ? d.toLocaleDateString('en') + ' – ' : ''}${this.amount} - ${this.description}${this.subcategory ? ' - ' + this.subcategory : ''} ${this.category ? ' - ' + this.category : ''} ${this.ref ? '(🔁)' : ''}`
     }
 }
 

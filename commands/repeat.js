@@ -14,9 +14,9 @@ module.exports = function (bot) {
         }
 
         const inputText = message.text.replace(CMD, '').trim()
-        const [ amount, description, category ] = utils.parseExpenseInput(inputText) || []
+        const [amount, description, subcategory, category] = utils.parseExpenseInput(inputText) || []
 
-        if (!amount)  return bot.sendMessage(new bot.classes.Message(message.chat.id, {
+        if (!amount) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text: `Invalid format. You need to send a message like \`${cfg.COMMANDS.REPEAT} 1.99 Cake #food\` to set up a recurring expense.`,
             parse_mode: 'Markdown'
         }))
@@ -27,6 +27,7 @@ module.exports = function (bot) {
                 amount: amount,
                 description: description,
                 timestamp: new Date(message.date * 1000),
+                subcategory: subcategory,
                 category: category,
                 isTemplate: true
             }, (err, ok) => {

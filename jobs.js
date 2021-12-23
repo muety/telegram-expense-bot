@@ -54,6 +54,7 @@ function recurringExpensesJob(bot) {
                 t.amount,
                 t.description,
                 new Date(),
+                t.subcategory,
                 t.category,
                 t._id.toString()
             ))

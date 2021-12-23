@@ -14,7 +14,7 @@ module.exports = function (bot) {
         }
 
         const inputText = message.text.replace(CMD, '').trim()
-        const [ amount, description, category ] = utils.parseExpenseInput(inputText) || []
+        const [amount, description, subcategory, category] = utils.parseExpenseInput(inputText) || []
 
         if (!amount) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
             text: `Sorry, your command must look like this: \`${cfg.COMMANDS.NEW} 1.99 Lunch\`\nOptionally you could also specify a category using a hash tag like this:\`${cfg.COMMANDS.NEW} 1.99 Lunch #food\`. You can also simply leave out the \`${cfg.COMMANDS.NEW}\` and only type \`1.99 Lunch #food.\``,
@@ -26,6 +26,7 @@ module.exports = function (bot) {
             amount: amount,
             description: description,
             timestamp: new Date(message.date * 1000),
+            subcategory: subcategory,
             category: category
         }, (err, ok) => {
             if (err) bot.sendMessage(new bot.classes.Message(message.chat.id, {

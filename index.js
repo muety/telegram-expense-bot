@@ -84,11 +84,11 @@ function processNonCommand(message) {
     }
 
     // A message consisting anything else - probably an expense to add
-    const [ amount, description, category ] = utils.parseExpenseInput(message.text) || []
+    const [amount, description, subcategory, category] = utils.parseExpenseInput(message.text) || []
     if (!amount) return bot.sendMessage(new bot.classes.Message(message.chat.id, {
         text: 'Sorry, I didn\'t understand you. Please try again.'
     }))
-    commands.new(message, [amount, description, category])
+    commands.new(message, [amount, description, subcategory, category])
 }
 
 function processInlineQuery(query) {
