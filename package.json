@@ -20,7 +20,7 @@
         "nodejs"
     ],
     "dependencies": {
-        "mongodb": "^3.5.0",
+        "mongodb": "^3.7.3",
         "node-cron": "^2.0.3",
         "prom-client": "git://github.com/siimon/prom-client",
         "safe-eval-2": "^0.4.2",
@@ -28,5 +28,8 @@
     },
     "devDependencies": {
         "jasmine": "https://github.com/jasmine/jasmine-npm.git"
+    },
+    "resolutions": {
+        "telegram-bot-sdk/**/json-schema": "0.4.0"
     }
 }
