@@ -22,9 +22,9 @@
     "dependencies": {
         "mongodb": "^3.7.3",
         "node-cron": "^2.0.3",
+        "node-telegram-bot-api": "^0.58.0",
         "prom-client": "git://github.com/siimon/prom-client",
-        "safe-eval-2": "^0.4.2",
-        "telegram-bot-sdk": "^0.3.1"
+        "safe-eval-2": "^0.4.2"
     },
     "devDependencies": {
         "jasmine": "https://github.com/jasmine/jasmine-npm.git"
