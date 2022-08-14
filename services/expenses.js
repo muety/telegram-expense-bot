@@ -1,12 +1,16 @@
-const MONTHS_LOWER = require('../constants').MONTHS_LOWER
+const MONTHS_LOWER = require('../constants').MONTHS_LOWER,
+    Expense = require('../model/expense'),
+    safeEval = require('safe-eval-2')
+
+const AMOUNT_PATTERN = /^(\-?[0-9]+(?:\.[0-9]{0,2})?)$/g
 
 class ExpensesService {
     constructor(db) {
         this.db = db
     }
 
-    async getMany(user, month, category) {
-        if (!user) return
+    async list(user, month, category) {
+        if (!user) throw new Error('user missing')
 
         const cursor = await this.db
             .expenses()
@@ -17,8 +21,21 @@ class ExpensesService {
         return data.map(this._mapExpense)
     }
 
-    async summarizeMany(user, month, category) {
-        if (!user) return
+    async listRecurring(user) {
+        if (!user) throw new Error('user missing')
+
+        const cursor = await this.db.expenses().find({
+            user,
+            isTemplate: true,
+        })
+
+        const data = await cursor.toArray()
+
+        return data.map(this._mapExpense)
+    }
+
+    async summarize(user, month, category) {
+        if (!user) throw new Error('user missing')
 
         const query = this._buildQuery(user, month, category)
         delete query.category
@@ -39,6 +56,35 @@ class ExpensesService {
             }))
         data.sort((e1, e2) => e1._id.localeCompare(e2._id))
         return data
+    }
+
+    async insert(expense) {
+        if (!expense.user) throw new Error('user missing')
+
+        return await this.db.expenses().insertOne({
+            user: expense.user,
+            amount: expense.amount,
+            description: expense.description,
+            timestamp: expense.timestamp,
+            category: expense.category,
+            isTemplate: expense.isTemplate || undefined,
+        })
+    }
+
+    async delete(id) {
+        if (!id) throw new Error('id missing')
+
+        return await this.db.expenses().deleteOne({ _id: id })
+    }
+
+    static parseAmount(text) {
+        const isExpression = !AMOUNT_PATTERN.test(text.trim())
+        return round(
+            isExpression
+                ? tryEval(text.replace(/[a-zA-Z]/g, ''))
+                : parseFloat(text),
+            2
+        )
     }
 
     _buildQuery(user, month, category) {
@@ -68,14 +114,29 @@ class ExpensesService {
 
     _mapExpense(dbObj) {
         return new Expense(
+            dbObj._id,
             dbObj.user,
             dbObj.amount.toFixed(2),
             dbObj.description,
             dbObj.timestamp,
-            dbObj.subcategory,
             dbObj.category,
+            dbObj.isTemplate,
             dbObj.ref
         )
+    }
+}
+
+function round(value, places) {
+    if (!value) return null
+    const power = Math.pow(10, places)
+    return Math.round(value * power) / power
+}
+
+function tryEval(command) {
+    try {
+        return safeEval(command)
+    } catch (e) {
+        return null
     }
 }
 

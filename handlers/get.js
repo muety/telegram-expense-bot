@@ -61,7 +61,7 @@ function onGetCombined(bot) {
 async function printExpenseSummary(user, month, category) {
     const expenses = new ExpensesService(db)
 
-    const result = await expenses.summarizeMany(user, month, category)
+    const result = await expenses.summarize(user, month, category)
 
     const total = result
         .reduce((acc, val) => (acc += parseFloat(val.total)), 0)
