@@ -2,6 +2,7 @@
 
 const TelegramBot = require('node-telegram-bot-api'),
     handlers = require('./handlers'),
+    jobs = require('./jobs'),
     db = require('./db'),
     cfg = require('./config')
 
@@ -13,6 +14,9 @@ async function run() {
     })
 
     handlers.registerAll(bot)
+
+    jobs.runDefault(bot)
+    jobs.scheduleDefault(bot)
 }
 
 process.on('SIGINT', async () => {

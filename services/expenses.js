@@ -13,9 +13,7 @@ class ExpensesService {
         if (!user) throw new Error('user missing')
 
         const cursor = await this.db.expenses().find(this._buildQuery(user, month, category))
-
         const data = await cursor.toArray()
-
         return data.map(this._mapExpense)
     }
 
@@ -26,9 +24,7 @@ class ExpensesService {
             user,
             isTemplate: true,
         })
-
         const data = await cursor.toArray()
-
         return data.map(this._mapExpense)
     }
 
@@ -63,7 +59,24 @@ class ExpensesService {
             timestamp: expense.timestamp,
             category: expense.category,
             isTemplate: expense.isTemplate || undefined,
+            ref: expense.ref || undefined,
         })
+    }
+
+    async insertMany(expenses) {
+        if (expenses.filter((e) => !e.user).length) throw new Error('user missing')
+
+        return await this.db.expenses().insertMany(
+            expenses.map((e) => ({
+                user: e.user,
+                amount: e.amount,
+                description: e.description,
+                timestamp: e.timestamp,
+                category: e.category,
+                isTemplate: e.isTemplate || undefined,
+                ref: e.ref || undefined,
+            }))
+        )
     }
 
     async delete(id) {
@@ -77,12 +90,19 @@ class ExpensesService {
         return await this.db.expenses().remove(this._buildQuery(user, month, category))
     }
 
+    // TODO: build more specific methods instead
+    async findRaw(query, options, map = true) {
+        const cursor = await this.db.expenses().find(query, options)
+        const data = await cursor.toArray()
+        return map ? data.map(this._mapExpense) : data
+    }
+
     static parseAmount(text) {
         const isExpression = !AMOUNT_PATTERN.test(text.trim())
         return round(isExpression ? tryEval(text.replace(/[a-zA-Z]/g, '')) : parseFloat(text), 2)
     }
 
-    _buildQuery(user, month, category) {
+    static _buildQuery(user, month, category) {
         const query = {
             user: user,
             $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }],
@@ -107,7 +127,7 @@ class ExpensesService {
         return query
     }
 
-    _mapExpense(dbObj) {
+    static _mapExpense(dbObj) {
         return new Expense(
             dbObj._id,
             dbObj.user,
