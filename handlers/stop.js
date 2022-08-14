@@ -7,47 +7,36 @@ const db = require('../db'),
 const PATTERN_DEFAULT = /^\/stop$/i
 const PATTERN_PARAMS = /^\/stop (\d+)$/i
 
+const expenseService = new ExpensesService(db)
+
 function onStopDefault(bot) {
     return async function (msg) {
-        const expenses = new ExpensesService(db)
-
-        const result = await expenses.listRecurring(msg.chat.id)
-        const text = `Please send \`/stop\` alongside the number of the expense to stop, e.g. \`/stop 1\`. The following recurring expenses are currently active: \n\n${printExpenses(result)}`
-        return bot.sendMessage(msg.chat.id, text, {
-            parse_mode: 'Markdown',
-        })
+        const result = await expenseService.listRecurring(msg.chat.id)
+        const text = `Please send \`/stop\` alongside the number of the expense to stop, e.g. \`/stop 1\`. The following recurring expenses are currently active: \n\n${printExpenses(
+            result
+        )}`
+        await bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' })
     }
 }
 
 function onStop(bot) {
     return async function (msg, match) {
-        const expenses = new ExpensesService(db)
-
         const index = parseInt(match[1])
 
-        const result = await expenses.listRecurring(msg.chat.id)
+        const result = await expenseService.listRecurring(msg.chat.id)
         if (!index || index > result.length) {
-            return bot.sendMessage(
-                message.chat.id,
-                `Invalid command, sorry 😕`,
-                { parse_mode: 'Markdown' }
-            )
+            return await bot.sendMessage(message.chat.id, `Invalid command, sorry 😕`, { parse_mode: 'Markdown' })
         }
 
         try {
-            await expenses.delete(result[index - 1].id)
+            await expenseService.delete(result[index - 1].id)
             result.splice(index - 1, 1)
 
             const text = `Recurring expense cancelled. The following are still active:\n\n${printExpenses(result)}`
-
-            bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' })
+            await bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' })
         } catch (e) {
-            bot.sendMessage(msg.chat.id, 'Something went wrong, sorry.', {
-                parse_mode: 'Markdown',
-            })
-            console.error(
-                `Failed to stop recurring expense of user ${msg.chat.id}: ${e}`
-            )
+            console.error(`Failed to stop recurring expense of user ${msg.chat.id}: ${e}`)
+            await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕', { parse_mode: 'Markdown' })
         }
     }
 }

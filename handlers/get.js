@@ -3,72 +3,79 @@ const db = require('../db'),
     MONTHS = require('../constants').MONTHS
 
 const PATTERN_DEFAULT = /^\/get$/i
-const PATTERN_MONTH =
-    /^\/get (january|february|match|april|may|june|july|august|september|october|november|december)$/i
+const PATTERN_MONTH = /^\/get (january|february|match|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY = /^\/get (#\w+)$/i
 const PATTERN_COMBINED =
     /^\/get (january|february|match|april|may|june|july|august|september|october|november|december) (#\w+)$/i
 const PATTERN_MONTH_PLAIN = /^(january|february|match|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY_PLAIN = /^(#\w+)$/i
 
+const expenseService = new ExpensesService(db)
+
 function onGetDefault(bot) {
-    return function (msg) {
+    return async function (msg) {
         const keyboard = []
         for (let i = 0; i < 4; i++) {
-            keyboard[i] = MONTHS.slice(i*3, i*3+3)
+            keyboard[i] = MONTHS.slice(i * 3, i * 3 + 3)
         }
 
-        return bot.sendMessage(
-            msg.chat.id,
-            'Select a month to view expenses for.',
-            {
-                reply_markup: { keyboard },
-            }
-        )
+        return await bot.sendMessage(msg.chat.id, 'Select a month to view expenses for.', {
+            reply_markup: { keyboard },
+        })
     }
 }
 
 function onGetMonth(bot, matchIdx) {
     return async function (msg, match) {
-        const text = await printExpenseSummary(msg.chat.id, match[matchIdx || 1], null)
-        bot.sendMessage(msg.chat.id, text, {
-            parse_mode: 'Markdown',
-            reply_markup: { remove_keyboard: true },
-        })
+        try {
+            const text = await printExpenseSummary(msg.chat.id, match[matchIdx || 1], null)
+            await bot.sendMessage(msg.chat.id, text, {
+                parse_mode: 'Markdown',
+                reply_markup: { remove_keyboard: true },
+            })
+        } catch (e) {
+            console.error(`Failed to get monthly expenses for user ${msg.chat.id}: ${e}`)
+            await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
+        }
     }
 }
 
 function onGetCategory(bot, matchIdx) {
     return async function (msg, match) {
-        const text = await printExpenseSummary(msg.chat.id, null, match[matchIdx || 1])
-        bot.sendMessage(msg.chat.id, text, {
-            parse_mode: 'Markdown',
-            reply_markup: { remove_keyboard: true },
-        })
+        try {
+            const text = await printExpenseSummary(msg.chat.id, null, match[matchIdx || 1])
+            await bot.sendMessage(msg.chat.id, text, {
+                parse_mode: 'Markdown',
+                reply_markup: { remove_keyboard: true },
+            })
+        } catch (e) {
+            console.error(`Failed to get category expenses for user ${msg.chat.id}: ${e}`)
+            await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
+        }
     }
 }
 
 function onGetCombined(bot) {
     return async function (msg, match) {
-        const text = await printExpenseSummary(msg.chat.id, match[1], match[2])
-        bot.sendMessage(msg.chat.id, text, {
-            parse_mode: 'Markdown',
-            reply_markup: { remove_keyboard: true },
-        })
+        try {
+            const text = await printExpenseSummary(msg.chat.id, match[1], match[2])
+            await bot.sendMessage(msg.chat.id, text, {
+                parse_mode: 'Markdown',
+                reply_markup: { remove_keyboard: true },
+            })
+        } catch (e) {
+            console.error(`Failed to get combined expenses for user ${msg.chat.id}: ${e}`)
+            await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
+        }
     }
 }
 
 async function printExpenseSummary(user, month, category) {
-    const expenses = new ExpensesService(db)
-
-    const result = await expenses.summarize(user, month, category)
-
-    const total = result
-        .reduce((acc, val) => (acc += parseFloat(val.total)), 0)
-        .toFixed(2)
+    const expenses = await expenseService.summarize(user, month, category)
+    const total = expenses.reduce((acc, val) => (acc += parseFloat(val.total)), 0).toFixed(2)
 
     let text = `You've spent a total of *${total}*.\n\n`
-    text += result.map((e) => `${e._id} – ${e.total}`).join('\n')
+    text += expenses.map((e) => `${e._id} – ${e.total}`).join('\n')
 
     return text
 }

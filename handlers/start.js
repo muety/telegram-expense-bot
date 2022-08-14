@@ -46,8 +46,8 @@ Version: \`${package.version}\`
 `
 
 function onHelp(bot) {
-    return function (msg) {
-        bot.sendMessage(msg.chat.id, text, {
+    return async function (msg) {
+        await bot.sendMessage(msg.chat.id, text, {
             parse_mode: 'Markdown',
             disable_web_page_preview: true,
         })
@@ -55,8 +55,9 @@ function onHelp(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /help ...')
+    console.log('Registering handlers for /start ...')
     bot.onText(/^\/help$/, onHelp(bot))
+    bot.onText(/^\/start$/, onHelp(bot))
 }
 
 module.exports = {

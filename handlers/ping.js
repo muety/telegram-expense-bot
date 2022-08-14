@@ -1,8 +1,8 @@
 const package = require('./../package.json')
 
 function onPing(bot) {
-    return function (msg) {
-        bot.sendMessage(msg.chat.id, `Version: \`${package.version}\``, {
+    return async function (msg) {
+        await bot.sendMessage(msg.chat.id, `Version: \`${package.version}\``, {
             parse_mode: 'Markdown',
         })
     }
