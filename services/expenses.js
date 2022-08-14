@@ -12,9 +12,7 @@ class ExpensesService {
     async list(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        const cursor = await this.db
-            .expenses()
-            .find(this._buildQuery(user, month, category))
+        const cursor = await this.db.expenses().find(this._buildQuery(user, month, category))
 
         const data = await cursor.toArray()
 
@@ -42,10 +40,7 @@ class ExpensesService {
 
         const cursor = await this.db
             .expenses()
-            .aggregate([
-                { $match: query },
-                { $group: { _id: '$category', total: { $sum: '$amount' } } },
-            ])
+            .aggregate([{ $match: query }, { $group: { _id: '$category', total: { $sum: '$amount' } } }])
 
         const data = (await cursor.toArray())
             .filter((e) => !category || e._id === category)
@@ -73,18 +68,18 @@ class ExpensesService {
 
     async delete(id) {
         if (!id) throw new Error('id missing')
-
         return await this.db.expenses().deleteOne({ _id: id })
+    }
+
+    async clear(user, month, category) {
+        if (!user) throw new Error('user missing')
+
+        return await this.db.expenses().remove(this._buildQuery(user, month, category))
     }
 
     static parseAmount(text) {
         const isExpression = !AMOUNT_PATTERN.test(text.trim())
-        return round(
-            isExpression
-                ? tryEval(text.replace(/[a-zA-Z]/g, ''))
-                : parseFloat(text),
-            2
-        )
+        return round(isExpression ? tryEval(text.replace(/[a-zA-Z]/g, '')) : parseFloat(text), 2)
     }
 
     _buildQuery(user, month, category) {
