@@ -43,5 +43,14 @@ $ yarn start:production
 ## Metrics
 When using webhook mode, [Prometheus](https://prometheus.io) metrics are exposed at `/metrics`.
 
+## Database
+```javascript
+db.expenses.createIndex({ "user": 1 }, { name: "idx_user" });
+db.expenses.createIndex({ "user": 1, "isTemplate": 1, "timestamp": 1, "category": 1 }, { name: "idx_full_query" });
+db.expenses.createIndex({ "isTemplate": 1, "user": 1 }, { name: "idx_template_user" });
+db.expenses.createIndex({ "isTemplate": 1, "user": 1, "timestamp": 1 }, { name: "idx_template_user_time" });
+db.expenses.createIndex({ "ref": 1 }, { name: "idx_ref" });
+```
+
 ## License
 MIT @ [Ferdinand Mütsch](https://muetsch.io)
