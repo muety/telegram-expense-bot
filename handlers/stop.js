@@ -47,7 +47,7 @@ function printExpenses(expenses) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /stop ...')
+    console.log('✅ Registering handlers for /stop ...')
     bot.onText(PATTERN_DEFAULT, onStopDefault(bot))
     bot.onText(PATTERN_PARAMS, onStop(bot))
 }

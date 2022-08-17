@@ -12,39 +12,54 @@ class ExpensesService {
     async list(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        const cursor = await this.db.expenses().find(this._buildQuery(user, month, category))
-        const data = await cursor.toArray()
+        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category)).toArray()
         return data.map(this._mapExpense)
+    }
+
+    async count() {
+        return await this.db
+            .expenses()
+            .estimatedDocumentCount()
+    }
+
+    async countCategories() {
+        const result = await this.db
+            .expenses()
+            .aggregate([{ $group: { _id: '$category' } }, { $group: { _id: null, count: { $sum: 1 } } }])
+            .toArray()
+        return result.length === 1 ? result[0].count : 0
     }
 
     async listRecurring(user) {
         if (!user) throw new Error('user missing')
 
-        const cursor = await this.db.expenses().find({
-            user,
-            isTemplate: true,
-        })
-        const data = await cursor.toArray()
+        const data = await this.db
+            .expenses()
+            .find({
+                user,
+                isTemplate: true,
+            })
+            .toArray()
         return data.map(this._mapExpense)
     }
 
     async summarize(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        const query = this._buildQuery(user, month, category)
+        const query = ExpensesService._buildQuery(user, month, category)
         delete query.category
 
-        const cursor = await this.db
+        const data = (await this.db
             .expenses()
             .aggregate([{ $match: query }, { $group: { _id: '$category', total: { $sum: '$amount' } } }])
-
-        const data = (await cursor.toArray())
+            .toArray())
             .filter((e) => !category || e._id === category)
             .map((e) => ({
                 ...e,
                 _id: e._id || 'uncategorized',
                 total: e.total.toFixed(2),
             }))
+
         data.sort((e1, e2) => e1._id.localeCompare(e2._id))
         return data
     }
@@ -87,14 +102,37 @@ class ExpensesService {
     async clear(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        return await this.db.expenses().remove(this._buildQuery(user, month, category))
+        return await this.db.expenses().remove(ExpensesService._buildQuery(user, month, category))
     }
 
     // TODO: build more specific methods instead
     async findRaw(query, options, map = true) {
-        const cursor = await this.db.expenses().find(query, options)
-        const data = await cursor.toArray()
+        const data = await this.db
+            .expenses()
+            .find(query, options)
+            .toArray()
         return map ? data.map(this._mapExpense) : data
+    }
+
+    async sumTotal() {
+        const result = await this.db
+            .expenses()
+            .aggregate([
+                {
+                    $match: {
+                        $and: [
+                            { amount: { $gte: -10000 } },
+                            { amount: { $lte: 10000 } },
+                            {
+                                $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }],
+                            },
+                        ],
+                    },
+                },
+                { $group: { _id: null, total: { $sum: '$amount' } } },
+            ])
+            .toArray()
+        return result.length === 1 ? result[0].total : 0
     }
 
     static parseAmount(text) {

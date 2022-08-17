@@ -43,7 +43,7 @@ function onResetCategory(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /reset ...')
+    console.log('✅ Registering handlers for /reset ...')
     bot.onText(PATTERN_DEFAULT, onResetDefault(bot))
     bot.onText(PATTERN_MONTH, onResetMonth(bot))
     bot.onText(PATTERN_CATEGORY, onResetCategory(bot))

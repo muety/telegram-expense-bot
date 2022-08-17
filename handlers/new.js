@@ -44,7 +44,7 @@ function onNew(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /new ...')
+    console.log('✅ Registering handlers for /new ...')
     bot.onText(PATTERN_DEFAULT, onNewDefault(bot))
     bot.onText(PATTERN_PARAMS, onNew(bot))
     bot.onText(PATTERN_PLAIN, onNew(bot))

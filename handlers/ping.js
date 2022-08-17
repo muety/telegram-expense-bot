@@ -9,7 +9,7 @@ function onPing(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /ping ...')
+    console.log('✅ Registering handlers for /ping ...')
     bot.onText(/\/ping/, onPing(bot))
 }
 

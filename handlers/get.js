@@ -81,7 +81,7 @@ async function printExpenseSummary(user, month, category) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /get ...')
+    console.log('✅ Registering handlers for /get ...')
     bot.onText(PATTERN_DEFAULT, onGetDefault(bot))
     bot.onText(PATTERN_MONTH, onGetMonth(bot))
     bot.onText(PATTERN_CATEGORY, onGetCategory(bot))

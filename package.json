@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "jasmine",
-        "start": "node index.js"
+        "start": "node index.js",
+        "start:production": "NODE_ENV=production node index.js"
     },
     "homepage": "https://github.com/muety/telegram-expense-bot",
     "author": {
@@ -20,6 +21,8 @@
         "nodejs"
     ],
     "dependencies": {
+        "express": "^4.18.1",
+        "express-async-handler": "^1.2.0",
         "mongodb": "^3.7.3",
         "node-cron": "^2.0.3",
         "node-telegram-bot-api": "^0.58.0",
@@ -31,5 +34,8 @@
     },
     "resolutions": {
         "telegram-bot-sdk/**/json-schema": "0.4.0"
+    },
+    "engines": {
+        "node": ">= 14.17.0"
     }
 }

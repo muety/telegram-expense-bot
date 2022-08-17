@@ -10,7 +10,7 @@ const expenseService = new ExpensesService(db)
 // insert recurring expenses at the first of every month
 function recurringExpensesJob(bot) {
     return async () => {
-        console.log('[job] Syncing recurring expenses ...')
+        console.log('⚙️ Syncing recurring expenses ...')
 
         const date = new Date()
         const from = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -51,12 +51,12 @@ function recurringExpensesJob(bot) {
         if (newExpenses.length) {
             try {
                 await expenseService.insertMany(newExpenses)
-                console.log(`[job] Inserted ${newExpenses.length} new expenses.`)
+                console.log(`⚙️ Inserted ${newExpenses.length} new expenses.`)
             } catch (e) {
-                console.error(`[job] Failed to insert new expenses from templates: ${e}.`)
+                console.error(`⚙️ Failed to insert new expenses from templates: ${e}.`)
             }
         } else {
-            console.log('[job] Nothing to do.')
+            console.log('⚙️ Nothing to do.')
         }
     }
 }

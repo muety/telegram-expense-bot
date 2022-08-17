@@ -40,7 +40,7 @@ function onBroadcast(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /broadcast ...')
+    console.log('✅ Registering handlers for /broadcast ...')
     bot.onText(PATTERN_DEFAULT, onBroadcast(bot))
 }
 

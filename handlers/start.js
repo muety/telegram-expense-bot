@@ -55,7 +55,7 @@ function onHelp(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /start ...')
+    console.log('✅ Registering handlers for /start ...')
     bot.onText(/^\/help$/, onHelp(bot))
     bot.onText(/^\/start$/, onHelp(bot))
 }

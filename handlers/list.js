@@ -50,7 +50,7 @@ async function printExpenseList(user, month, category) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /list ...')
+    console.log('✅ Registering handlers for /list ...')
     bot.onText(PATTERN_DEFAULT, onListDefault(bot))
     bot.onText(PATTERN_MONTH, onListMonth(bot))
     bot.onText(PATTERN_COMBINED, onListCombined(bot))

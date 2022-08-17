@@ -49,7 +49,7 @@ function printCsv(expenses) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /export ...')
+    console.log('✅ Registering handlers for /export ...')
     bot.onText(PATTERN_DEFAULT, onExportDefault(bot))
     bot.onText(PATTERN_MONTH, onExportMonth(bot))
 }

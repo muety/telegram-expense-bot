@@ -5,13 +5,21 @@ class UsersService {
 
     async listActive(thresholdDays = 7) {
         const startDate = new Date(new Date().setDate(new Date().getDate() - thresholdDays))
-        const result = await this.db
+        return await this.db
             .expenses()
             .aggregate([
                 { $match: { timestamp: { $gt: startDate } } },
                 { $group: { _id: '$user', count: { $sum: 1 } } },
             ])
-        return await result.toArray()
+            .toArray()
+    }
+
+    async count() {
+        const result = await this.db
+            .expenses()
+            .aggregate([{ $group: { _id: '$category' } }, { $group: { _id: null, count: { $sum: 1 } } }])
+            .toArray()
+        return result.length === 1 ? result[0].count : 0
     }
 }
 

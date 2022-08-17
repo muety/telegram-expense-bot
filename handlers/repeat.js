@@ -49,7 +49,7 @@ function onRepeat(bot) {
 }
 
 function register(bot) {
-    console.log('Registering handlers for /repeat ...')
+    console.log('✅ Registering handlers for /repeat ...')
     bot.onText(PATTERN_DEFAULT, onRepeatDefault(bot))
     bot.onText(PATTERN_PARAMS, onRepeat(bot))
 }
