@@ -25,9 +25,7 @@ To get an overview of your current financial situation you can do the following:
 *Listing your expenses*
 To get an overview of your current financial situation you can do the following:
 1. \`/list April\` - all expenses in April. Of course this works with any other month.
-2. \`/list #food\` - all expenses in the _#food_ category in the current month.
-3. \`/list #food April\` - all expenses in the _#food_ category in April
-4. The same works for weekdays instead of months, e.g. \`Monday\`
+2. \`/list #food April\` - all expenses in the _#food_ category in April
 
 *Exporting your expenses*
 You can export your expenses to a CSV file to archive them or do further analyses in Excel or so. To create new export do:
@@ -37,8 +35,6 @@ You can export your expenses to a CSV file to archive them or do further analyse
 To reset (i.e. delete) all your expenses for a given month or category, you can do the following:
 1. \`/reset April\` - delete all expenses in April. Of course this works with any other month.
 2. \`/reset #food\` - delete all expenses in the _#food_ category in the current month.
-3. \`/reset #food April\` - delete all expenses in the _#food_ category in April
-4. The same works for weekdays instead of months, e.g. \`Monday\`
 
 Code, bug reports, feature requests and further information on [GitHub](https://github.com/muety/telegram-expense-bot).
 
