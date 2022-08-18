@@ -1,4 +1,8 @@
-# telegram-expense-bot
+<p align="center">
+    <img src="botfather/logo.png" width="200">
+</p>
+
+# 🤖 telegram-expense-bot
 This is a bot for the [Telegram](https://telegram.org/) messaging app using their [bot platform](https://core.telegram.org/bots). The code is open-source and consequently anybody could set up an own instance of the bot. To learn how to do so, see [this section](#how-to-host-it-myself). The official hosted version is available as [@ExpenseBot](https://telegram.me/ExpenseBot). To learn more about this bot, please refer to [this blog article](https://ferdinand-muetsch.de/telegram-expensebot-doodlerbot.html) or just send the bot a message with the `/help` command.
 
 ![](https://anchr.io/i/rbtPU.png)
