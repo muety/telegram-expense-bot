@@ -39,9 +39,17 @@ function deleteFile(filePath) {
     })
 }
 
+// wraps an async function with a catch-all error handler
+const wrapAsync = fn =>
+    function asyncUtilWrap(...args) {
+        const fnReturn = fn(...args)
+        return Promise.resolve(fnReturn).catch(console.error)
+    }
+
 module.exports = {
     capitalize,
     asCsv,
     writeTempFile,
     deleteFile,
+    wrapAsync,
 }

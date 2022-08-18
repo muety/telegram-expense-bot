@@ -13,7 +13,7 @@ class ExpensesService {
         if (!user) throw new Error('user missing')
 
         const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category)).toArray()
-        return data.map(this._mapExpense)
+        return data.map(ExpensesService._mapExpense)
     }
 
     async count() {
@@ -40,7 +40,7 @@ class ExpensesService {
                 isTemplate: true,
             })
             .toArray()
-        return data.map(this._mapExpense)
+        return data.map(ExpensesService._mapExpense)
     }
 
     async summarize(user, month, category) {
@@ -111,7 +111,7 @@ class ExpensesService {
             .expenses()
             .find(query, options)
             .toArray()
-        return map ? data.map(this._mapExpense) : data
+        return map ? data.map(ExpensesService._mapExpense) : data
     }
 
     async sumTotal() {

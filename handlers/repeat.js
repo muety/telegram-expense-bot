@@ -1,6 +1,7 @@
 const Expense = require('../model/expense')
 
 const db = require('../db'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/repeat$/i
@@ -48,10 +49,10 @@ function onRepeat(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /repeat ...')
-    bot.onText(PATTERN_DEFAULT, onRepeatDefault(bot))
-    bot.onText(PATTERN_PARAMS, onRepeat(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onRepeatDefault(bot))))
+    bot.onText(PATTERN_PARAMS, middleware(wrapAsync(onRepeat(bot))))
 }
 
 module.exports = {

@@ -1,5 +1,6 @@
 const db = require('../db'),
     utils = require('../utils'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/export$/i
@@ -48,10 +49,10 @@ function printCsv(expenses) {
     return `${header}\n${body}`
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /export ...')
-    bot.onText(PATTERN_DEFAULT, onExportDefault(bot))
-    bot.onText(PATTERN_MONTH, onExportMonth(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onExportDefault(bot))))
+    bot.onText(PATTERN_MONTH, middleware(wrapAsync(onExportMonth(bot))))
 }
 
 module.exports = {

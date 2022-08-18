@@ -22,12 +22,13 @@ To configure your bot, clone this repository, copy `config.example.json` to `con
 | `BOT_TOKEN`             | `-`           | Yes          | Your bot's token (received from BotFather).                                                                                           |
 | `PUBLIC_URL`            | `-`           | Webhook only | URL at which your bot is publicly available (for Telegram to send updates). Required in webhook mode. Ex.: `https://bot.example.org`. |
 | `DB_URL`                | `-`           | Yes          | MongoDB database connection string (starting with `mongodb://`)                                                                       |
-| `DB_COLLECTION`         | `expenses`    | Yes          | MongoDB collection for storing expenses                                                                                               |
+| `DB_COLLECTION`         | `expenses`    | No           | MongoDB collection for storing expenses                                                                                               |
 | `BIND_IPV4`             | `127.0.0.1`   | Webhook only | Address where to listen for HTTP requests                                                                                             |
 | `PORT`                  | `3010`        | Webhook only | Port where to listen for HTTP requests                                                                                                |
-| `BOT_NAME`              | `ExpenseBot`  | Yes          | The bot's name                                                                                                                        |
-| `BOT_TELEGRAM_USERNAME` | `@ExpenseBot` | Yes          | The bot's actual unique Telegram username                                                                                             |
+| `BOT_NAME`              | ``            | Yes          | The bot's name                                                                                                                        |
+| `BOT_TELEGRAM_USERNAME` | ``            | Yes          | The bot's actual unique Telegram username                                                                                             |
 | `ADMIN`                 | `[]`          | Yes          | List of Telegram user IDs to grant admin access                                                                                       |
+| `RATE_LIMIT`            | `250`         | No           | Maximum number of messages per hour per user                                                                                          |
 
 
 ### Install

@@ -1,7 +1,6 @@
-const Expense = require('../model/expense')
-
 const db = require('../db'),
     ExpensesService = require('../services/expenses'),
+    wrapAsync = require('../utils').wrapAsync,
     MONTHS = require('../constants').MONTHS
 
 const PATTERN_DEFAULT = /^\/stop$/i
@@ -46,10 +45,10 @@ function printExpenses(expenses) {
     return expenses.map((t, i) => `**${i + 1}** – ${t.toString(true)}`).join('\n')
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /stop ...')
-    bot.onText(PATTERN_DEFAULT, onStopDefault(bot))
-    bot.onText(PATTERN_PARAMS, onStop(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onStopDefault(bot))))
+    bot.onText(PATTERN_PARAMS, middleware(wrapAsync(onStop(bot))))
 }
 
 module.exports = {

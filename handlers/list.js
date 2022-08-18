@@ -1,4 +1,5 @@
 const db = require('../db'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses'),
     MONTHS = require('../constants').MONTHS
 
@@ -49,11 +50,11 @@ async function printExpenseList(user, month, category) {
     return expenses.join('\n')
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /list ...')
-    bot.onText(PATTERN_DEFAULT, onListDefault(bot))
-    bot.onText(PATTERN_MONTH, onListMonth(bot))
-    bot.onText(PATTERN_COMBINED, onListCombined(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onListDefault(bot))))
+    bot.onText(PATTERN_MONTH, middleware(wrapAsync(onListMonth(bot))))
+    bot.onText(PATTERN_COMBINED, middleware(wrapAsync(onListCombined(bot))))
 }
 
 module.exports = {

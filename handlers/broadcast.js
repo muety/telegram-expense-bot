@@ -1,5 +1,6 @@
 const db = require('../db'),
     cfg = require('../config.json'),
+    wrapAsync = require('../utils').wrapAsync,
     UsersService = require('../services/users')
 
 const PATTERN_DEFAULT = /^\/broadcast (\/yes )?(.+)$/i
@@ -11,7 +12,7 @@ function onBroadcast(bot) {
         if (!cfg.ADMINS.includes(msg.from.id)) return
 
         const dry = !match[1]
-        
+
         let userIds, recipients
 
         try {
@@ -39,9 +40,9 @@ function onBroadcast(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /broadcast ...')
-    bot.onText(PATTERN_DEFAULT, onBroadcast(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onBroadcast(bot))))
 }
 
 module.exports = {

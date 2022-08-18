@@ -1,4 +1,5 @@
-const package = require('./../package.json')
+const package = require('./../package.json'),
+    wrapAsync = require('../utils').wrapAsync
 
 const text = `
 Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
@@ -50,10 +51,10 @@ function onHelp(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /start ...')
-    bot.onText(/^\/help$/, onHelp(bot))
-    bot.onText(/^\/start$/, onHelp(bot))
+    bot.onText(/^\/help$/, middleware(wrapAsync(onHelp(bot))))
+    bot.onText(/^\/start$/, middleware(wrapAsync(onHelp(bot))))
 }
 
 module.exports = {

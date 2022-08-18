@@ -1,4 +1,5 @@
 const db = require('../db'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses'),
     MONTHS = require('../constants').MONTHS
 
@@ -80,14 +81,14 @@ async function printExpenseSummary(user, month, category) {
     return text
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /get ...')
-    bot.onText(PATTERN_DEFAULT, onGetDefault(bot))
-    bot.onText(PATTERN_MONTH, onGetMonth(bot))
-    bot.onText(PATTERN_CATEGORY, onGetCategory(bot))
-    bot.onText(PATTERN_COMBINED, onGetCombined(bot))
-    bot.onText(PATTERN_MONTH_PLAIN, onGetMonth(bot, 0))
-    bot.onText(PATTERN_CATEGORY_PLAIN, onGetCategory(bot, 0))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onGetDefault(bot))))
+    bot.onText(PATTERN_MONTH, middleware(wrapAsync(onGetMonth(bot))))
+    bot.onText(PATTERN_CATEGORY, middleware(wrapAsync(onGetCategory(bot))))
+    bot.onText(PATTERN_COMBINED, middleware(wrapAsync(onGetCombined(bot))))
+    bot.onText(PATTERN_MONTH_PLAIN, middleware(wrapAsync(onGetMonth(bot, 0))))
+    bot.onText(PATTERN_CATEGORY_PLAIN, middleware(wrapAsync(onGetCategory(bot, 0))))
 }
 
 module.exports = {

@@ -1,4 +1,5 @@
 const db = require('../db'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/reset$/i
@@ -42,11 +43,11 @@ function onResetCategory(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /reset ...')
-    bot.onText(PATTERN_DEFAULT, onResetDefault(bot))
-    bot.onText(PATTERN_MONTH, onResetMonth(bot))
-    bot.onText(PATTERN_CATEGORY, onResetCategory(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onResetDefault(bot))))
+    bot.onText(PATTERN_MONTH, middleware(wrapAsync(onResetMonth(bot))))
+    bot.onText(PATTERN_CATEGORY, middleware(wrapAsync(onResetCategory(bot))))
 }
 
 module.exports = {

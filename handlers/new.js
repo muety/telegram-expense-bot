@@ -1,6 +1,7 @@
 const Expense = require('../model/expense')
 
 const db = require('../db'),
+    wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/new$/i
@@ -43,11 +44,11 @@ function onNew(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /new ...')
-    bot.onText(PATTERN_DEFAULT, onNewDefault(bot))
-    bot.onText(PATTERN_PARAMS, onNew(bot))
-    bot.onText(PATTERN_PLAIN, onNew(bot))
+    bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onNewDefault(bot))))
+    bot.onText(PATTERN_PARAMS, middleware(wrapAsync(onNew(bot))))
+    bot.onText(PATTERN_PLAIN, middleware(wrapAsync(onNew(bot))))
 }
 
 module.exports = {

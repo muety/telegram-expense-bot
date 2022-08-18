@@ -8,8 +8,8 @@ const TelegramBot = require('node-telegram-bot-api'),
     jobs = require('./jobs'),
     db = require('./db'),
     cfg = require('./config'),
-    metrics = require('./metrics')
-
+    metrics = require('./metrics'),
+    rateLimit = require('./middlewares/rate_imit')
 
 async function trySelfRegister(bot, secret) {
     if (cfg.PUBLIC_URL) {
@@ -36,7 +36,9 @@ async function run() {
     })
 
     // Handler registration
-    handlers.registerAll(bot)
+    handlers.registerAll(bot, rateLimit(
+        60 * 60, cfg.RATE_LIMIT || -1
+    ))
 
     // Web server setup + route registration
     if (cfg.WEBHOOK_MODE) {
@@ -48,7 +50,7 @@ async function run() {
             if (req.get('X-Telegram-Bot-Api-Secret-Token') !== secretToken) {
                 return res.sendStatus(401)
             }
-
+            
             bot.processUpdate(req.body)
             res.sendStatus(200)
         }))

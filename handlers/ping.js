@@ -1,4 +1,5 @@
-const package = require('./../package.json')
+const package = require('./../package.json'),
+    wrapAsync = require('../utils').wrapAsync
 
 function onPing(bot) {
     return async function (msg) {
@@ -8,9 +9,9 @@ function onPing(bot) {
     }
 }
 
-function register(bot) {
+function register(bot, middleware) {
     console.log('✅ Registering handlers for /ping ...')
-    bot.onText(/\/ping/, onPing(bot))
+    bot.onText(/\/ping/, middleware(wrapAsync(onPing(bot))))
 }
 
 module.exports = {
