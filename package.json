@@ -26,6 +26,7 @@
         "mongodb": "^3.7.3",
         "node-cron": "^2.0.3",
         "node-telegram-bot-api": "^0.58.0",
+        "node-telegram-bot-api-middleware": "^0.1.3",
         "prom-client": "git://github.com/siimon/prom-client",
         "safe-eval-2": "^0.4.2"
     },
