@@ -21,6 +21,7 @@ function recurringExpensesJob(bot) {
                 await expenseService.findRaw(
                     {
                         ref: { $exists: true },
+                        ref: { $ne: null },
                         timestamp: { $lt: to, $gte: from },
                     },
                     {
