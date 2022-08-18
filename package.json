@@ -1,10 +1,9 @@
 {
     "name": "telegram-expense-bot",
-    "version": "1.8.2",
+    "version": "2.0.0",
     "description": "A bot that helps you manage and track your daily expenses.",
     "main": "index.js",
     "scripts": {
-        "test": "jasmine",
         "start": "node index.js",
         "start:production": "NODE_ENV=production node index.js"
     },
@@ -31,7 +30,6 @@
         "safe-eval-2": "^0.4.2"
     },
     "devDependencies": {
-        "jasmine": "https://github.com/jasmine/jasmine-npm.git"
     },
     "resolutions": {
         "telegram-bot-sdk/**/json-schema": "0.4.0"
