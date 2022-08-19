@@ -28,7 +28,7 @@ async function run() {
     if (!cfg.BOT_TOKEN) throw Error('❌ You need to pass a bot token')
     const secretToken = randomUUID()
 
-    await db.connect()
+    const dbRoot = await db.connect()
 
     // Bot setup
     const bot = new TelegramBot(cfg.BOT_TOKEN, {
@@ -50,7 +50,7 @@ async function run() {
             if (req.get('X-Telegram-Bot-Api-Secret-Token') !== secretToken) {
                 return res.sendStatus(401)
             }
-            
+
             bot.processUpdate(req.body)
             res.sendStatus(200)
         }))
@@ -59,6 +59,17 @@ async function run() {
         app.get('/metrics', asyncHandler(async (req, res) => {
             res.set('Content-Type', metrics.contentType)
             res.end(await metrics.metrics())
+        }))
+
+        console.log('✅ Registering /health route ...')
+        app.get('/health', asyncHandler(async (req, res) => {
+            let dbState = 0
+            try {
+                await await dbRoot.command({ ping: 1 })
+                dbState = 1
+            } catch (e) { }
+            res.set('Content-Type', 'text/plain')
+            res.end(`app=1\ndb=${dbState}`)
         }))
 
         app.listen(cfg.PORT, cfg.BIND_IP4, () => {

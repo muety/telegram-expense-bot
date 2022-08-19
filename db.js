@@ -12,6 +12,8 @@ async function connect() {
 
         // get collections
         collections.expenses = client.db().collection(config.DB_COLLECTION)
+
+        return await client.db()
     } catch (e) {
         console.error(e)
         await disconnect()
