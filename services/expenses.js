@@ -124,7 +124,7 @@ class ExpensesService {
                             { amount: { $gte: -10000 } },
                             { amount: { $lte: 10000 } },
                             {
-                                $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }],
+                                $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }, { isTemplate: null }],
                             },
                         ],
                     },
@@ -143,7 +143,7 @@ class ExpensesService {
     static _buildQuery(user, month, category) {
         const query = {
             user: user,
-            $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }],
+            $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }, { isTemplate: null }],
         }
 
         if (month) {
