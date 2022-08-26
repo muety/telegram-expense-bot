@@ -4,6 +4,9 @@ const fs = require('fs'),
     os = require('os'),
     path = require('path')
 
+
+// String Utils
+
 function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1)
 }
@@ -15,6 +18,8 @@ function asCsv(expenses) {
         .join('\n')
     return `${header}\n${body}`
 }
+
+// FS Utils
 
 function writeTempFile(fileName, content) {
     const filePath = path.join(os.tmpdir(), fileName)
@@ -39,6 +44,31 @@ function deleteFile(filePath) {
     })
 }
 
+// Telegram Utils
+
+function sendSplit(bot, recipient, text, options) {
+    const linesIn = text.split('\n')
+    const linesOut = [[]]
+
+    let currentBytes = 0
+    for (let i = 0; i < linesIn.length; i++) {
+        const len = Buffer.byteLength(linesIn[i], 'utf8')  // because of emojis, one char can be more than 1 byte
+        if (currentBytes + len < 4095) {
+            linesOut.at(-1).push(linesIn[i])
+            currentBytes += len
+        } else {
+            linesOut.push([linesIn[i]])
+            currentBytes = len
+        }
+    }
+
+    return Promise.all(linesOut.map(msgLines => bot.sendMessage(
+        recipient, msgLines.join('\n'), options
+    )))
+}
+
+// Other Utils
+
 // wraps an async function with a catch-all error handler
 const wrapAsync = fn =>
     function asyncUtilWrap(...args) {
@@ -51,5 +81,6 @@ module.exports = {
     asCsv,
     writeTempFile,
     deleteFile,
+    sendSplit,
     wrapAsync,
 }

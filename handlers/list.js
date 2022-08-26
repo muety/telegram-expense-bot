@@ -1,7 +1,7 @@
 const db = require('../db'),
     wrapAsync = require('../utils').wrapAsync,
-    ExpensesService = require('../services/expenses'),
-    MONTHS = require('../constants').MONTHS
+    sendSplit = require('../utils').sendSplit,
+    ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/list$/i
 const PATTERN_MONTH =
@@ -25,7 +25,7 @@ function onListMonth(bot) {
     return async function (msg, match) {
         try {
             const text = await printExpenseList(msg.chat.id, match[1], null)
-            await bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' })
+            return await sendSplit(bot, msg.chat.id, text, { parse_mode: 'Markdown' })
         } catch (e) {
             console.error(`Failed to list monthly expenses for uer ${msg.chat.id}: ${e}`)
             await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
@@ -37,7 +37,7 @@ function onListCombined(bot) {
     return async function (msg, match) {
         try {
             const text = await printExpenseList(msg.chat.id, match[1], match[2])
-            await bot.sendMessage(msg.chat.id, text, { parse_mode: 'Markdown' })
+            return await sendSplit(bot, msg.chat.id, text, { parse_mode: 'Markdown' })
         } catch (e) {
             console.error(`Failed to list combined expenses for uer ${msg.chat.id}: ${e}`)
             await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
