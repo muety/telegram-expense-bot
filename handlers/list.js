@@ -46,7 +46,7 @@ function onListCombined(bot) {
 }
 
 async function printExpenseList(user, month, category) {
-    const expenses = await expenseService.getMany(user, month, category)
+    const expenses = await expenseService.list(user, month, category)
     return expenses.join('\n')
 }
 
