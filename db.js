@@ -11,7 +11,8 @@ async function connect() {
         console.log('✅ Connected to database ...')
 
         // get collections
-        collections.expenses = client.db().collection(config.DB_COLLECTION)
+        collections.expenses = client.db().collection(config.DB_COLLECTION || 'expenses')
+        collections.misc = client.db().collection(config.DB_COLLECTION_MISC || 'misc')
 
         return await client.db()
     } catch (e) {
@@ -29,8 +30,13 @@ function expenses() {
     return collections.expenses
 }
 
+function misc() {
+    return collections.misc
+}
+
 module.exports = {
     connect,
     disconnect,
     expenses,
+    misc,
 }

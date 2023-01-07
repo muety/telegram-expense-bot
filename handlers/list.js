@@ -1,7 +1,8 @@
 const db = require('../db'),
     wrapAsync = require('../utils').wrapAsync,
     sendSplit = require('../utils').sendSplit,
-    ExpensesService = require('../services/expenses')
+    ExpensesService = require('../services/expenses'),
+    KeyValueService = require('../services/keyValue')
 
 const PATTERN_DEFAULT = /^\/list$/i
 const PATTERN_MONTH =
@@ -10,6 +11,7 @@ const PATTERN_COMBINED =
     /^\/list (january|february|match|april|may|june|july|august|september|october|november|december) (#\w+)$/i
 
 const expenseService = new ExpensesService(db)
+const keyValueService = new KeyValueService(db)
 
 function onListDefault(bot) {
     return async function (msg) {
@@ -46,7 +48,8 @@ function onListCombined(bot) {
 }
 
 async function printExpenseList(user, month, category) {
-    const expenses = await expenseService.list(user, month, category)
+    const userTz = await keyValueService.getUserTz(user)
+    const expenses = (await expenseService.list(user, month, category)).map(e => e.toString(false, userTz))
     return expenses.join('\n')
 }
 

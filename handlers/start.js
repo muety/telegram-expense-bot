@@ -4,6 +4,8 @@ const package = require('./../package.json'),
 const text = `
 Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
 
+*Initial setup*
+You'll have to configure your preferred time zone initially. To do so, please send your current location as a message.
 
 *Adding a new expense*
 The following examples will show you various ways to add a new expense.

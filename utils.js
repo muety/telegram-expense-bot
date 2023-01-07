@@ -2,7 +2,8 @@
 
 const fs = require('fs'),
     os = require('os'),
-    path = require('path')
+    path = require('path'),
+    geoTz = require('geo-tz')
 
 
 // String Utils
@@ -67,6 +68,11 @@ function sendSplit(bot, recipient, text, options) {
     )))
 }
 
+// Date utils
+function resolveTimeZone(lat, lon) {
+    return geoTz.find(lat, lon)[0]
+}
+
 // Other Utils
 
 // wraps an async function with a catch-all error handler
@@ -82,5 +88,6 @@ module.exports = {
     writeTempFile,
     deleteFile,
     sendSplit,
+    resolveTimeZone,
     wrapAsync,
 }

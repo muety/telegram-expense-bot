@@ -2,6 +2,7 @@
     "PUBLIC_URL": "",
     "DB_URL": "",
     "DB_COLLECTION": "expenses",
+    "DB_COLLECTION_MISC": "misc",
     "BOT_TOKEN": "",
     "BOT_NAME": "",
     "BOT_TELEGRAM_USERNAME": "",

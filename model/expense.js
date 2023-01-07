@@ -1,5 +1,6 @@
 'use strict'
 
+const moment = require('moment-timezone')
 
 class Expense {
     constructor(
@@ -22,9 +23,9 @@ class Expense {
         this.ref = ref
     }
 
-    toString(noTimestamp) {
-        let d = new Date(this.timestamp)
-        return `${!noTimestamp ? d.toLocaleDateString('en') + ' – ' : ''}${
+    toString(noTimestamp, tz) {
+        let d = moment.tz(this.timestamp, tz)
+        return `${!noTimestamp ? d.format('YYYY/M/D') + ' – ' : ''}${
             this.amount
         } - ${this.description} ${this.category ? ' - ' + this.category : ''} ${
             this.ref ? '(🔁)' : ''

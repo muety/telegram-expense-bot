@@ -1,5 +1,7 @@
 const MONTHS_LOWER = require('../constants').MONTHS_LOWER,
+    moment = require('moment-timezone'),
     Expense = require('../model/expense'),
+    KeyValueService = require('./keyValue'),
     safeEval = require('safe-eval-2')
 
 const AMOUNT_PATTERN = /^(\-?[0-9]+(?:\.[0-9]{0,2})?)$/g
@@ -7,12 +9,14 @@ const AMOUNT_PATTERN = /^(\-?[0-9]+(?:\.[0-9]{0,2})?)$/g
 class ExpensesService {
     constructor(db) {
         this.db = db
+        this.keyValueService = new KeyValueService(db)
     }
 
     async list(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category)).toArray()
+        const userTz = await this.keyValueService.getUserTz(user)
+        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category, userTz)).toArray()
         return data.map(ExpensesService._mapExpense)
     }
 
@@ -46,7 +50,8 @@ class ExpensesService {
     async summarize(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        const query = ExpensesService._buildQuery(user, month, category)
+        const userTz = await this.keyValueService.getUserTz(user)
+        const query = ExpensesService._buildQuery(user, month, category, userTz)
         delete query.category
 
         const data = (await this.db
@@ -102,7 +107,8 @@ class ExpensesService {
     async clear(user, month, category) {
         if (!user) throw new Error('user missing')
 
-        return await this.db.expenses().remove(ExpensesService._buildQuery(user, month, category))
+        const userTz = await this.keyValueService.getUserTz(user)
+        return await this.db.expenses().remove(ExpensesService._buildQuery(user, month, category, userTz))
     }
 
     // TODO: build more specific methods instead
@@ -140,7 +146,7 @@ class ExpensesService {
         return round(isExpression ? tryEval(text.replace(/[a-zA-Z]/g, '')) : parseFloat(text), 2)
     }
 
-    static _buildQuery(user, month, category) {
+    static _buildQuery(user, month, category, userTz) {
         const query = {
             user: user,
             $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }, { isTemplate: null }],
@@ -152,8 +158,8 @@ class ExpensesService {
 
             const dMonth = MONTHS_LOWER.indexOf(month.toLowerCase())
             const dYear = y - (m - dMonth < 0)
-            const from = new Date(dYear, dMonth, 1)
-            const to = new Date(dYear, dMonth + 1, 1)
+            const from = moment.tz(new Date(dYear, dMonth, 1), userTz).utc(true).toDate()
+            const to = moment.tz(new Date(dYear, dMonth + 1, 1), userTz).utc(true).toDate()
 
             query.timestamp = { $lt: to, $gte: from }
         }
