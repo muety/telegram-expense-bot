@@ -50,7 +50,7 @@ function onListCombined(bot) {
 async function printExpenseList(user, month, category) {
     const userTz = await keyValueService.getUserTz(user)
     const expenses = (await expenseService.list(user, month, category)).map(e => e.toString(false, userTz))
-    return expenses.join('\n')
+    return expenses.length ? expenses.join('\n') : '🙅‍♂️ No expenses for this month'
 }
 
 function register(bot, middleware) {

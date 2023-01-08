@@ -16,7 +16,7 @@ class ExpensesService {
         if (!user) throw new Error('user missing')
 
         const userTz = await this.keyValueService.getUserTz(user)
-        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category, userTz)).toArray()
+        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category, userTz)).sort({ timestamp: 1 }).toArray()
         return data.map(ExpensesService._mapExpense)
     }
 
@@ -43,6 +43,7 @@ class ExpensesService {
                 user,
                 isTemplate: true,
             })
+            .sort({ timestamp: 1 })
             .toArray()
         return data.map(ExpensesService._mapExpense)
     }
@@ -116,8 +117,15 @@ class ExpensesService {
         const data = await this.db
             .expenses()
             .find(query, options)
+            .sort({ timestamp: 1 })
             .toArray()
         return map ? data.map(ExpensesService._mapExpense) : data
+    }
+
+    async countRaw(query, options) {
+        return await this.db
+            .expenses()
+            .countDocuments(query, options)
     }
 
     async sumTotal() {
@@ -153,15 +161,15 @@ class ExpensesService {
         }
 
         if (month) {
-            const y = new Date().getFullYear()
-            const m = new Date().getMonth()
+            const currentYear = new Date().getFullYear()
+            const currentMonth = new Date().getMonth()
+            const m = MONTHS_LOWER.indexOf(month.toLowerCase())
+            const y = currentYear - (currentMonth - m < 0)
 
-            const dMonth = MONTHS_LOWER.indexOf(month.toLowerCase())
-            const dYear = y - (m - dMonth < 0)
-            const from = moment.tz(new Date(dYear, dMonth, 1), userTz).utc(true).toDate()
-            const to = moment.tz(new Date(dYear, dMonth + 1, 1), userTz).utc(true).toDate()
+            const from = moment.tz({ y, M: m }, userTz).startOf('month')
+            const to = from.clone().endOf('month')
 
-            query.timestamp = { $lt: to, $gte: from }
+            query.timestamp = { $lt: to.toDate(), $gte: from.toDate() }
         }
 
         if (category) {

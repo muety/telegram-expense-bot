@@ -1,6 +1,6 @@
 {
     "name": "telegram-expense-bot",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "description": "A bot that helps you manage and track your daily expenses.",
     "main": "index.js",
     "scripts": {
@@ -20,7 +20,6 @@
         "nodejs"
     ],
     "dependencies": {
-        "@mapbox/timespace": "^2.0.4",
         "express": "^4.18.1",
         "express-async-handler": "^1.2.0",
         "geo-tz": "^7.0.6",
