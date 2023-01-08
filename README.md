@@ -10,6 +10,9 @@ This is a bot for the [Telegram](https://telegram.org/) messaging app using thei
 ## What does it do?
 This bot’s purpose is to help people manage their daily expenses and keep track of their financial situation. Users can add expenses from wherever they are using a few simple commands from within the chat and have an eye on how much they have spent in a month or a day. This obviates the need for confusing Excel spreadsheets or paper notes. 
 
+## Initial setup
+When you first start using the bot, please send it your current location as a message, so the bot is aware of your time zone and can handle dates properly for you.
+
 ## How to host it myself?
 ### Prerequisites
 In order to host this bot on your own, you need a few things.
