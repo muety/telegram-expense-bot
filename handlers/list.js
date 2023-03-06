@@ -6,9 +6,9 @@ const db = require('../db'),
 
 const PATTERN_DEFAULT = /^\/list$/i
 const PATTERN_MONTH =
-    /^\/list (january|february|match|april|may|june|july|august|september|october|november|december)$/i
+    /^\/list (january|february|march|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_COMBINED =
-    /^\/list (january|february|match|april|may|june|july|august|september|october|november|december) (#\w+)$/i
+    /^\/list (january|february|march|april|may|june|july|august|september|october|november|december) (#\w+)$/i
 
 const expenseService = new ExpensesService(db)
 const keyValueService = new KeyValueService(db)

@@ -4,11 +4,11 @@ const db = require('../db'),
     MONTHS = require('../constants').MONTHS
 
 const PATTERN_DEFAULT = /^\/get$/i
-const PATTERN_MONTH = /^\/get (january|february|match|april|may|june|july|august|september|october|november|december)$/i
+const PATTERN_MONTH = /^\/get (january|february|march|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY = /^\/get (#\w+)$/i
 const PATTERN_COMBINED =
-    /^\/get (january|february|match|april|may|june|july|august|september|october|november|december) (#\w+)$/i
-const PATTERN_MONTH_PLAIN = /^(january|february|match|april|may|june|july|august|september|october|november|december)$/i
+    /^\/get (january|february|march|april|may|june|july|august|september|october|november|december) (#\w+)$/i
+const PATTERN_MONTH_PLAIN = /^(january|february|march|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY_PLAIN = /^(#\w+)$/i
 
 const expenseService = new ExpensesService(db)

@@ -5,7 +5,7 @@ const db = require('../db'),
 
 const PATTERN_DEFAULT = /^\/export$/i
 const PATTERN_MONTH =
-    /^\/export (january|february|match|april|may|june|july|august|september|october|november|december)$/i
+    /^\/export (january|february|march|april|may|june|july|august|september|october|november|december)$/i
 
 const expenseService = new ExpensesService(db)
 
