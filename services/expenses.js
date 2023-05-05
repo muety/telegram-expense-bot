@@ -109,7 +109,7 @@ class ExpensesService {
         if (!user) throw new Error('user missing')
 
         const userTz = await this.keyValueService.getUserTz(user)
-        return await this.db.expenses().remove(ExpensesService._buildQuery(user, month, category, userTz))
+        return await this.db.expenses().deleteMany(ExpensesService._buildQuery(user, month, category, userTz))
     }
 
     // TODO: build more specific methods instead
