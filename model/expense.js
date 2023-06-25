@@ -30,6 +30,10 @@ class Expense {
         } - ${this.description} ${this.category ? ' - ' + this.category : ''} ${
             this.ref ? '(🔁)' : ''
         }`
+        .replaceAll('_', '\\_')
+        .replaceAll('*', '\\*')
+        .replaceAll('[', '\\[')
+        .replaceAll('`', '\\`')
     }
 }
 
