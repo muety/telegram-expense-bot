@@ -6,7 +6,7 @@ const db = require('../db'),
 
 const PATTERN_DEFAULT = /^\/repeat$/i
 const PATTERN_PARAMS =
-    /^\/repeat ((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/i
+    /^\/repeat ((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z0-9_]+))?$/i
 
 const HELP_TEXT =
     'Invalid format. You need to send a message like `/repeat 1.99 Cake #food` to set up a recurring expense.'

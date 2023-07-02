@@ -5,8 +5,8 @@ const db = require('../db'),
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/new$/i
-const PATTERN_PARAMS = /^\/new ((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/i
-const PATTERN_PLAIN = /^((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z_]+))?$/i
+const PATTERN_PARAMS = /^\/new ((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z0-9_]+))?$/i
+const PATTERN_PLAIN = /^((?:(?:\-?[0-9]+(?:\.[0-9]{0,2})?)|(?:[\+\-\*\/\s]))+) ([^#]+[^ #])(?: (#[a-zA-Z0-9_]+))?$/i
 
 const HELP_TEXT = `Sorry, your command must look like this: \`/new 1.99 Lunch\`\nOptionally you could also specify a category using a hash tag like this:\`/new 1.99 Lunch #food\`. You can also simply leave out the \`/new\` and only type \`1.99 Lunch #food.\``
 
