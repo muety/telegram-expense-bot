@@ -6,8 +6,8 @@ const db = require('../db'),
 const PATTERN_DEFAULT = /^\/get$/i
 const PATTERN_MONTH = /^\/get (january|february|march|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY = /^\/get (#\w+)$/i
-const PATTERN_COMBINED =
-    /^\/get (january|february|march|april|may|june|july|august|september|october|november|december) (#\w+)$/i
+const PATTERN_COMBINED = /^\/get (january|february|march|april|may|june|july|august|september|october|november|december) (#\w+)$/i
+const PATTERN_DATE = /^\/get (\d{4}-\d{2}-\d{2})$/i
 const PATTERN_MONTH_PLAIN = /^(january|february|march|april|may|june|july|august|september|october|november|december)$/i
 const PATTERN_CATEGORY_PLAIN = /^(#\w+)$/i
 
@@ -23,6 +23,21 @@ function onGetDefault(bot) {
         return await bot.sendMessage(msg.chat.id, 'Select a month to view expenses for.', {
             reply_markup: { keyboard },
         })
+    }
+}
+
+function onGetDate(bot, matchIdx) {
+    return async function (msg, match) {
+        try {
+            const text = await printExpenseSummary(msg.chat.id, null, null, match[matchIdx || 1])
+            await bot.sendMessage(msg.chat.id, text, {
+                parse_mode: 'Markdown',
+                reply_markup: { remove_keyboard: true },
+            })
+        } catch (e) {
+            console.error(`Failed to get day-specific expenses for user ${msg.chat.id}: ${e}`)
+            await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
+        }
     }
 }
 
@@ -71,8 +86,8 @@ function onGetCombined(bot) {
     }
 }
 
-async function printExpenseSummary(user, month, category) {
-    const expenses = await expenseService.summarize(user, month, category)
+async function printExpenseSummary(user, month, category, date) {
+    const expenses = await expenseService.summarize(user, month, category, date)
     const total = expenses.reduce((acc, val) => (acc += parseFloat(val.total)), 0).toFixed(2)
 
     let text = `You've spent a total of *${total}*.\n\n`
@@ -84,6 +99,7 @@ async function printExpenseSummary(user, month, category) {
 function register(bot, middleware) {
     console.log('✅ Registering handlers for /get ...')
     bot.onText(PATTERN_DEFAULT, middleware(wrapAsync(onGetDefault(bot))))
+    bot.onText(PATTERN_DATE, middleware(wrapAsync(onGetDate(bot))))
     bot.onText(PATTERN_MONTH, middleware(wrapAsync(onGetMonth(bot))))
     bot.onText(PATTERN_CATEGORY, middleware(wrapAsync(onGetCategory(bot))))
     bot.onText(PATTERN_COMBINED, middleware(wrapAsync(onGetCombined(bot))))

@@ -2,7 +2,7 @@ const package = require('./../package.json'),
     wrapAsync = require('../utils').wrapAsync
 
 const text = `
-Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month or category.
+Welcome to the ExpenseBot. This bot helps you manage and track your daily expenses. You can add new expenses or get an overview or list for any month, category or day.
 
 *Initial setup*
 You'll have to configure your preferred time zone initially. To do so, please send your current location as a message.
@@ -24,11 +24,13 @@ To get an overview of your current financial situation you can do the following:
 3. \`/get #food\` or simply \`#food\` - the total amount of expenses in the _#food_ category in the current month.
 4. \`/get #food April\` or simply \`#food April\` - the total amount of expenses in the _#food_ category in April
 5. The same works for weekdays instead of months, e.g. \`Monday\`
+6. \`/get 2024-02-25\` - the total amount of the expenses on Feb 25th 2024.
 
 *Listing your expenses*
 To get an overview of your current financial situation you can do the following:
 1. \`/list April\` - all expenses in April. Of course this works with any other month.
 2. \`/list #food April\` - all expenses in the _#food_ category in April
+3. \`/list 2024-02-25\` - all expenses on Feb 25th 2024.
 
 *Exporting your expenses*
 You can export your expenses to a CSV file to archive them or do further analyses in Excel or so. To create new export do:
@@ -38,6 +40,7 @@ You can export your expenses to a CSV file to archive them or do further analyse
 To reset (i.e. delete) all your expenses for a given month or category, you can do the following:
 1. \`/reset April\` - delete all expenses in April. Of course this works with any other month.
 2. \`/reset #food\` - delete all expenses in the _#food_ category in the current month.
+2. \`/reset 2024-02-25\` - delete all expenses from Feb 25th 2024.
 
 Code, bug reports, feature requests and further information on [GitHub](https://github.com/muety/telegram-expense-bot).
 

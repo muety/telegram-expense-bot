@@ -12,11 +12,11 @@ class ExpensesService {
         this.keyValueService = new KeyValueService(db)
     }
 
-    async list(user, month, category) {
+    async list(user, month, category, date) {
         if (!user) throw new Error('user missing')
 
         const userTz = await this.keyValueService.getUserTz(user)
-        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category, userTz)).sort({ timestamp: 1 }).toArray()
+        const data = await this.db.expenses().find(ExpensesService._buildQuery(user, month, category, date, userTz)).sort({ timestamp: 1 }).toArray()
         return data.map(ExpensesService._mapExpense)
     }
 
@@ -48,11 +48,11 @@ class ExpensesService {
         return data.map(ExpensesService._mapExpense)
     }
 
-    async summarize(user, month, category) {
+    async summarize(user, month, category, date) {
         if (!user) throw new Error('user missing')
 
         const userTz = await this.keyValueService.getUserTz(user)
-        const query = ExpensesService._buildQuery(user, month, category, userTz)
+        const query = ExpensesService._buildQuery(user, month, category, date, userTz)
         delete query.category
 
         const data = (await this.db
@@ -105,11 +105,11 @@ class ExpensesService {
         return await this.db.expenses().deleteOne({ _id: id })
     }
 
-    async clear(user, month, category) {
+    async clear(user, month, category, date) {
         if (!user) throw new Error('user missing')
 
         const userTz = await this.keyValueService.getUserTz(user)
-        return await this.db.expenses().deleteMany(ExpensesService._buildQuery(user, month, category, userTz))
+        return await this.db.expenses().deleteMany(ExpensesService._buildQuery(user, month, category, date, userTz))
     }
 
     // TODO: build more specific methods instead
@@ -154,7 +154,7 @@ class ExpensesService {
         return round(isExpression ? tryEval(text.replace(/[a-zA-Z]/g, '')) : parseFloat(text), 2)
     }
 
-    static _buildQuery(user, month, category, userTz) {
+    static _buildQuery(user, month, category, date, userTz) {
         const query = {
             user: user,
             $or: [{ isTemplate: { $exists: false } }, { isTemplate: false }, { isTemplate: null }],
@@ -174,6 +174,12 @@ class ExpensesService {
 
         if (category) {
             query.category = category
+        }
+
+        if (date) {
+            const from = moment.tz(date, userTz).startOf('day')
+            const to = from.clone().endOf('day')
+            query.timestamp =  {$gte: from.toDate(), $lt: to.toDate() }
         }
 
         return query
