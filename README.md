@@ -17,7 +17,7 @@ When you first start using the bot, please send it your current location as a me
 ### Prerequisites
 In order to host this bot on your own, you need a few things.
 * Server to run the bot on (since the bot uses the long polling method to [get updates](https://core.telegram.org/bots/api/#getupdates) instead of the web-hook one, you don't need HTTPS certificates or ports to be exposed)
-* Node.js >= 16
+* Node.js >= 20
 * A MongoDB database (you can use [mlab.com](http://mlab.com) to get a free, hosted MongoDB)
 * A bot token, which you get from registering a new bot to the [@BotFather](https://telegram.me/BotFather)
 
