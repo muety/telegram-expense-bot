@@ -2,3 +2,4 @@ node_modules
 .vscode
 recover.json
 config.json
+.yarn/*.gz
