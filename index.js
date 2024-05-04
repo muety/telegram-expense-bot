@@ -40,6 +40,15 @@ async function run() {
         60 * 60, cfg.RATE_LIMIT || -1
     ))
 
+    // Error handlers
+    bot.on('polling_error', (err) => {
+        console.error(`Polling error: ${err.code} - ${err.response?.body || ''}`)
+    })
+    
+    bot.on('webhook_error', (err) => {
+        console.error(`Polling error: ${err.code} - ${err.response?.body || ''}`)
+    })
+
     // Web server setup + route registration
     if (cfg.WEBHOOK_MODE) {
         const app = express()
