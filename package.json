@@ -1,6 +1,6 @@
 {
     "name": "telegram-expense-bot",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "description": "A bot that helps you manage and track your daily expenses.",
     "main": "index.js",
     "scripts": {
@@ -20,13 +20,13 @@
         "nodejs"
     ],
     "dependencies": {
-        "express": "^4.19.2",
+        "express": "^4.21.1",
         "express-async-handler": "^1.2.0",
-        "geo-tz": "^8.0.2",
-        "moment-timezone": "^0.5.45",
-        "mongodb": "^5.9.2",
+        "geo-tz": "^8.1.2",
+        "moment-timezone": "^0.5.46",
+        "mongodb": "^6.9.0",
         "node-cron": "^3.0.3",
-        "node-telegram-bot-api": "^0.65.1",
+        "node-telegram-bot-api": "^0.66.0",
         "node-telegram-bot-api-middleware": "^0.1.3",
         "prom-client": "https://github.com/siimon/prom-client.git#a88a5c3ce4e928ff05d91e64e74376495bfe0570",
         "safe-eval-2": "^0.4.2"
