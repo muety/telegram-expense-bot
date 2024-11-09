@@ -9,7 +9,9 @@ const TelegramBot = require('node-telegram-bot-api'),
     db = require('./db'),
     cfg = require('./config'),
     metrics = require('./metrics'),
-    rateLimit = require('./middlewares/rate_imit')
+    noop = require('./middlewares/noop'),
+    rateLimit = require('./middlewares/rate_imit'),
+    maintenanceMode = require('./middlewares/maintenance_mode')
 
 async function trySelfRegister(bot, secret) {
     if (cfg.PUBLIC_URL) {
@@ -35,10 +37,13 @@ async function run() {
         polling: !cfg.WEBHOOK_MODE,
     })
 
+    // Middlewares
+    let middleware = noop(bot)
+    middleware = middleware.use(rateLimit(bot, 60 * 60, cfg.RATE_LIMIT || -1))
+    middleware = middleware.use(maintenanceMode(bot, cfg.MAINTENANCE_MESSAGE))
+
     // Handler registration
-    handlers.registerAll(bot, rateLimit(
-        60 * 60, cfg.RATE_LIMIT || -1
-    ))
+    handlers.registerAll(bot, middleware)
 
     // Error handlers
     bot.on('polling_error', (err) => {

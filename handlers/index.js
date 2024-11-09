@@ -8,7 +8,7 @@ const handlers = fs
     .map((p) => require(`./${p}`))
 
 function registerAll(bot, rootMiddleware) {
-    rootMiddleware = rootMiddleware || noop()
+    rootMiddleware = rootMiddleware || noop(bot)
     handlers.forEach((h) => h.register(bot, rootMiddleware))
 }
 

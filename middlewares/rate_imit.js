@@ -1,8 +1,6 @@
-const RateLimiter = require('../vendor/rate_limiting'),
-    use = require('node-telegram-bot-api-middleware').use,
-    wrapAsync = require('../utils').wrapAsync
+const RateLimiter = require('../vendor/rate_limiting')
 
-function setup(window, capacity) {
+function setup(bot, window, capacity) {
     const limiter = new RateLimiter(window, capacity)  // no more than X req / hr in total per user
 
     function middleware(msg) {
@@ -12,7 +10,7 @@ function setup(window, capacity) {
         }
     }
 
-    return use(middleware)
+    return middleware
 }
 
 module.exports = setup
