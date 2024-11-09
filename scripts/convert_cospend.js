@@ -15,7 +15,7 @@ const fs = require('fs'),
   { stringify } = require('csv-stringify/sync')
 
 // User-defined variables section
-const INPUT_FILE = 'expenses_123456789_all.csv'
+const INPUT_FILE = 'expenses_123465798_all.csv'
 const OUTPUT_FILE = path.basename(`${INPUT_FILE.split('.')[0]}_cospend.csv`)
 const NAME = 'John Doe'
 // User-defined variables section
@@ -62,7 +62,7 @@ function processRow(row) {
     what: row.description,
     amount: parseFloat(row.amount),
     date: new Date(parseInt(row.timestamp, 10)).toISOString().split('T')[0],
-    timestamp: row.timestamp,
+    timestamp: parseInt(row.timestamp / 1000),
     payer_name: NAME,
     payer_weight: 1,
     payer_active: 1,
