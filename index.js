@@ -11,7 +11,8 @@ const TelegramBot = require('node-telegram-bot-api'),
     metrics = require('./metrics'),
     noop = require('./middlewares/noop'),
     rateLimit = require('./middlewares/rate_imit'),
-    maintenanceMode = require('./middlewares/maintenance_mode')
+    maintenanceMode = require('./middlewares/maintenance_mode'),
+    alertMessage = require('./middlewares/alert_message')
 
 async function trySelfRegister(bot, secret) {
     if (cfg.PUBLIC_URL) {
@@ -41,6 +42,7 @@ async function run() {
     let middleware = noop(bot)
     middleware = middleware.use(rateLimit(bot, 60 * 60, cfg.RATE_LIMIT || -1))
     middleware = middleware.use(maintenanceMode(bot, cfg.MAINTENANCE_MESSAGE))
+    middleware = middleware.use(alertMessage(bot, cfg.ALERT_MESSAGE))
 
     // Handler registration
     handlers.registerAll(bot, middleware)

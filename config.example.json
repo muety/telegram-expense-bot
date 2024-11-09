@@ -11,5 +11,6 @@
     "BIND_IP4": "127.0.0.1",
     "ADMINS": [],
     "RATE_LIMIT": 250,
-    "MAINTENANCE_MESSAGE": "Bot is currently offline for maintenance."
+    "MAINTENANCE_MESSAGE": null,
+    "ALERT_MESSAGE": null
 }
