@@ -11,6 +11,8 @@ const PATTERN_MONTH =
 
 const expenseService = new ExpensesService(db)
 
+const recentExports = {}  // user id -> export time
+
 function onExportDefault(bot) {
     return async function (msg) {
         return await bot.sendMessage(
@@ -23,7 +25,17 @@ function onExportDefault(bot) {
 
 function onExportMonth(bot) {
     return async function (msg, match) {
-        const expenses = match[1] === 'all'
+        const all = match[1] === 'all'
+
+        if (all) {
+            if (recentExports[msg.chat.id] && ((new Date() - recentExports[msg.chat.id]) / 1000) < 10 * 60) {
+                await bot.sendMessage(msg.chat.id, 'Sorry, you may only perform a full export at max. every 10 minutes.')
+                return
+            }
+            recentExports[msg.chat.id] = new Date()
+        }
+
+        const expenses = all
             ? await expenseService.listAll(msg.chat.id)
             : await expenseService.list(msg.chat.id, match[1])
         const csvData = printCsv(expenses)

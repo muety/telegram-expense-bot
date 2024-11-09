@@ -3,3 +3,4 @@ node_modules
 recover.json
 config.json
 .yarn/*.gz
+scripts/*.csv
