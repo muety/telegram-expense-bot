@@ -3,7 +3,8 @@
 const fs = require('fs'),
     os = require('os'),
     path = require('path'),
-    geoTz = require('geo-tz')
+    geoTz = require('geo-tz'),
+    archiver = require('archiver')
 
 
 // String Utils
@@ -33,6 +34,27 @@ function writeTempFile(fileName, content) {
         })
     })
 }
+
+/**
+ * @param {String} sourceFile: /some/folder/to/compress
+ * @param {String} outPath: /path/to/created.zip
+ * @returns {Promise}
+ */
+function zipFile(sourceFile, outPath) {
+    const archive = archiver('zip', { zlib: { level: 9 } })
+    const stream = fs.createWriteStream(outPath)
+
+    return new Promise((resolve, reject) => {
+        archive
+            .file(sourceFile, { name: path.basename(sourceFile) })
+            .on('error', err => reject(err))
+            .pipe(stream)
+
+        stream.on('close', () => resolve(outPath))
+        archive.finalize()
+    })
+}
+
 
 function deleteFile(filePath) {
     return new Promise((resolve, reject) => {
@@ -86,6 +108,7 @@ module.exports = {
     capitalize,
     asCsv,
     writeTempFile,
+    zipFile,
     deleteFile,
     sendSplit,
     resolveTimeZone,

@@ -20,6 +20,7 @@
         "nodejs"
     ],
     "dependencies": {
+        "archiver": "^7.0.1",
         "express": "^4.21.1",
         "express-async-handler": "^1.2.0",
         "geo-tz": "^8.1.2",

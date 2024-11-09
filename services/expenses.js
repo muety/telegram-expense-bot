@@ -20,6 +20,11 @@ class ExpensesService {
         return data.map(ExpensesService._mapExpense)
     }
 
+    async listAll(user) {
+        const data = await this.db.expenses().find(ExpensesService._buildQuery(user)).sort({ timestamp: 1 }).toArray()
+        return data.map(ExpensesService._mapExpense)
+    }
+
     async count() {
         return await this.db
             .expenses()

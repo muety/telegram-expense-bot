@@ -1,11 +1,13 @@
-const db = require('../db'),
+const os = require('os'),
+    path = require('path'),
+    db = require('../db'),
     utils = require('../utils'),
     wrapAsync = require('../utils').wrapAsync,
     ExpensesService = require('../services/expenses')
 
 const PATTERN_DEFAULT = /^\/export$/i
 const PATTERN_MONTH =
-    /^\/export (january|february|march|april|may|june|july|august|september|october|november|december)$/i
+    /^\/export (january|february|march|april|may|june|july|august|september|october|november|december|all)$/i
 
 const expenseService = new ExpensesService(db)
 
@@ -21,19 +23,24 @@ function onExportDefault(bot) {
 
 function onExportMonth(bot) {
     return async function (msg, match) {
-        const expenses = await expenseService.list(msg.chat.id, match[1])
+        const expenses = match[1] === 'all'
+            ? await expenseService.listAll(msg.chat.id)
+            : await expenseService.list(msg.chat.id, match[1])
         const csvData = printCsv(expenses)
 
         try {
             // TODO: send directly from stream / buffer, without writing to file
-            const filePath = await utils.writeTempFile(
-                `expenses_${msg.chat.id}_${utils.capitalize(match[1])}.csv`,
-                csvData
-            )
-            await bot.sendDocument(msg.chat.id, filePath, {
+            let csvFileName = `expenses_${msg.chat.id}_${match[1]}.csv`
+            let zipFileName = `${csvFileName}.zip`
+            let csvPath = await utils.writeTempFile(csvFileName, csvData)
+            let zipPath = true ? await utils.zipFile(csvPath, path.join(os.tmpdir(), zipFileName)) : null
+
+            await bot.sendDocument(msg.chat.id, zipPath || csvPath, {
                 caption: `CSV export of your expenses for ${utils.capitalize(match[1])}`,
             })
-            await utils.deleteFile(filePath)
+
+            if (csvPath) await utils.deleteFile(csvPath)
+            if (zipPath) await utils.deleteFile(zipPath)
         } catch (e) {
             console.error(`Failed to export expenses for user ${msg.chat.id}: ${e}`)
             await bot.sendMessage(msg.chat.id, 'Something went wrong, sorry 😕')
